@@ -20,7 +20,7 @@ public class PiController {
 	@RequestMapping("/")
 	String getHome()
 	{
-		return "Hello World";
+		return "Testing with Kalyan!!!";
 	}
 	
 	@RequestMapping(value = "/find_device", method = RequestMethod.GET, produces = "application/json")
