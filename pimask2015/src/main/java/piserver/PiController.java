@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PiController {
 
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
-
-	@RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/json")
+	
+	@RequestMapping("/")
+	String getHome()
+	{
+		return "Hello World";
+	}
+	
+	@RequestMapping(value = "/find_device", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> listDevices() {
 
 		String currentIp = null;
