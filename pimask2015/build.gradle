@@ -6,8 +6,6 @@ apply plugin: 'application'
 
 mainClassName = 'piserver.PiController'
 
-sourceCompatibility = 1.5
-
 repositories {
     mavenCentral()
 }
@@ -18,4 +16,7 @@ dependencies {
     compile("com.fasterxml.jackson.core:jackson-databind:2.6.3")
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
 
