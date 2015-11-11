@@ -1,9 +1,10 @@
 package piserver;
 
 import java.util.ArrayList;
-
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@ComponentScan
 @EnableAutoConfiguration
 public class PiController {
 
@@ -38,4 +40,10 @@ public class PiController {
 		
 		return new ResponseEntity<ArrayList<NetworkDevice>>(HttpStatus.NOT_FOUND);
 	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		SpringApplication.run(PiController.class, args);
+	}
+
 }
