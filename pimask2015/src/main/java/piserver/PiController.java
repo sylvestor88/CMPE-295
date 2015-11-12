@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ComponentScan
 @EnableAutoConfiguration
+@RequestMapping("/pimask/")
 public class PiController {
 
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
 	
-	@RequestMapping(value = "/find_device", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "find_devices", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> listDevices() {
 
 		String currentIp = null;
