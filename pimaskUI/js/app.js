@@ -13,5 +13,4 @@ var app = angular.module('PiMask',['ngRoute'])
 	.when('/', {
 		redirectTo:'/connectedDevices'
 	})
-
 });

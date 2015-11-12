@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html ng-app="PiMask" lang="en">
-
-<head>
-
+<head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Grayscale - Start Bootstrap Theme</title>
+    <title>PiMask - One Stop Controller</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -23,7 +21,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <style>
+     #findDevices{
+        margin-top: 75px;
+    }
+    </style>
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
@@ -50,7 +52,7 @@
                         <a href="#devices">Devices Connected</a>
                     </li>
                     <li>
-                        <a href="#/findDevices">Find New Device</a>
+                        <a href="#/findDevices" data-target="#findDevices">Find New Device</a>
                     </li>
                     <li>
                         <a href="#contact">Contact</a>
@@ -66,15 +68,15 @@
         <div ng-view> </div>
     </div> <!-- Form Container -->
 
-     <script type="js/jquery.js"></script>
+     <script type="text/javascript" src="js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
     <!--Angular Javascript -->
-    <script type="js/angular.min.js"></script>
-    <script type="js/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.min.js"></script>
     <!--App.js -->
-    <script type="js/app.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
 </body>
 
 </html>
