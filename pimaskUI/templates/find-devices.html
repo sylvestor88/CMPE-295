@@ -5,19 +5,9 @@
       <table class="table">
         <thead></thead>
           <tbody>
-            <tr>
-              <td>Pi 1</td>
-              <td>130.65.170.71</td>
-              <td><a href="">Configure</a></td>
-            </tr>
-            <tr>
-              <td>Pi 2</td>
-              <td>130.65.170.72</td>
-              <td><a href="">Configure</a></td>
-              </tr>
-            <tr>
-              <td>Pi 3</td>
-              <td>130.65.170.73</td>
+            <tr ng-repeat='name in names'>
+              <td>{{ name.ip }}</td>
+              <td>{{ name.hostname }}</td>
               <td><a href="">Configure</a></td>
             </tr>
           </tbody>

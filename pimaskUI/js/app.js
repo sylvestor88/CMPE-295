@@ -14,3 +14,13 @@ var app = angular.module('PiMask',['ngRoute'])
 		redirectTo:'/connectedDevices'
 	})
 });
+
+app.controller('FindDevicesController', function($scope, $http){
+	 $http.get('http://localhost:8080/pimask/find_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 })
+	 .error(function(){
+	 	alert("error");
+	 });
+});

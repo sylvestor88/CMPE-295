@@ -43,7 +43,6 @@ public class Helper {
 				if(line.indexOf("report") != -1 & line.indexOf(currentIp) == -1)
 				{
 					String[] report = line.split(" ");
-					
 					if(report.length == 6)
 					{
 						NetworkDevice newDevice = new NetworkDevice(report[5].substring(1, report[5].length() - 1), report[4]);
@@ -51,7 +50,7 @@ public class Helper {
 					}
 					else
 					{
-						NetworkDevice newDevice = new NetworkDevice(report[4].substring(1, report[4].length() - 1), "No Hostname");
+						NetworkDevice newDevice = new NetworkDevice(report[4], "No Hostname");
 						deviceList.add(newDevice);
 					}
 				}
