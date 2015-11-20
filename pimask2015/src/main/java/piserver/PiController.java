@@ -57,6 +57,18 @@ public class PiController {
 	}
 	
 	// save configured device to the database
+		@RequestMapping(value="save_device", method = RequestMethod.POST, consumes = "application/json")
+		public @ResponseBody ResponseEntity<Message> saveDevice(@Valid @RequestBody Device dev)
+		{
+			UUID id = UUIDs.random();
+			dev.setDevice_id(id);
+			Helper.saveDeviceInDB(dev);
+			Message msg = new Message("Device " + dev.getDevice_name() + " with IP " + dev.getDevice_ip() + " is now connected.");
+			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+		}
+		
+		
+	// get list of configured device from the database
 	@RequestMapping(value="connected", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<List<Device>> getDevices()
 	{
@@ -72,23 +84,29 @@ public class PiController {
 			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);	
 	}
 	
-	// save configured device to the database
-	@RequestMapping(value="save_device", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody ResponseEntity<Message> saveDevice(@Valid @RequestBody Device dev)
-	{
-		UUID id = UUIDs.random();
-		dev.setDevice_id(id);
-		Helper.saveDeviceInDB(dev);
-		Message msg = new Message("Device " + dev.getDevice_name() + " with IP " + dev.getDevice_ip() + " is now connected.");
-		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
-	}
-	
+	// save users to the database
 	@RequestMapping(value="save_user", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> saveUser(@Valid @RequestBody User user)
 	{
 		Helper.saveUserInDB(user);
 		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getUserid() + " saved.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+	
+	// get list of users from the database
+	@RequestMapping(value="users", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<List<User>> getUsers()
+	{
+		List<User> list = null;
+		Result<User> results = Helper.getUsers();
+		list = results.all();
+		
+		if(!(list == null))
+		{
+			return new ResponseEntity<List<User>>(list, HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);	
 	}
 
 	public static void main(String[] args) {

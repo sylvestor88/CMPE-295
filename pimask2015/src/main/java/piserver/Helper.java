@@ -108,4 +108,14 @@ public class Helper {
 		Result<Device> devices = DeviceMapper.map(results);
 		return devices;
 	}
+	
+	public static Result<User> getUsers()
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
+		ResultSet results = sess.execute("SELECT * FROM users;");
+		Result<User> users = UserMapper.map(results);
+		return users;
+	}
 }
