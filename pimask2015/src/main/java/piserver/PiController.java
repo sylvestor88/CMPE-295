@@ -1,24 +1,36 @@
 package piserver;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.datastax.driver.core.utils.UUIDs;
+
+import database.Device;
+import database.Message;
+import database.User;
 
 @RestController
 @ComponentScan
 @EnableAutoConfiguration
 @RequestMapping("/pimask/")
 public class PiController {
-
+	
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
 	
+	// finds devices on the same network as the Pi Server
 	@RequestMapping(value = "find_devices", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> listDevices() {
 
@@ -41,10 +53,29 @@ public class PiController {
 		
 		return new ResponseEntity<ArrayList<NetworkDevice>>(HttpStatus.NOT_FOUND);
 	}
+	
+	// save configured device to the database
+	@RequestMapping(value="save_device", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> saveDevice(@Valid @RequestBody Device dev)
+	{
+		UUID id = UUIDs.random();
+		dev.setDevice_id(id);
+		Helper.saveDeviceInDB(dev);
+		Message msg = new Message("Device " + dev.getDevice_name() + " with IP " + dev.getDevice_ip() + " is now connected.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value="save_user", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> saveUser(@Valid @RequestBody User user)
+	{
+		Helper.saveUserInDB(user);
+		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getUserid() + " saved.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SpringApplication.run(PiController.class, args);
 	}
-
+	
 }

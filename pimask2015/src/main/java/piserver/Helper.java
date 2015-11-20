@@ -4,7 +4,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.datastax.driver.core.Session;
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.MappingManager;
+
+import database.CassandraDB;
+import database.Device;
+import database.User;
+
 public class Helper {
+	
 	
 	public static String executeGetInet(String command) {
 
@@ -53,7 +62,8 @@ public class Helper {
 						NetworkDevice newDevice = new NetworkDevice(report[4], "No Hostname");
 						deviceList.add(newDevice);
 					}
-				}
+				}	
+				p.destroy();
 			}
 
 		} catch (Exception e) {
@@ -67,5 +77,23 @@ public class Helper {
 		int firstSeparator = 0;
 		int lastSeparator = currentIP.lastIndexOf(".");
 		return currentIP.substring(firstSeparator, lastSeparator + 1);
+	}
+	
+	public static void saveDeviceInDB(Device dev)
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		DeviceMapper.save(dev);
+		sess.close();
+	}
+	
+	public static void saveUserInDB(User user)
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
+		UserMapper.save(user);
+		sess.close();
 	}
 }
