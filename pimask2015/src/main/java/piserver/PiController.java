@@ -1,6 +1,7 @@
 package piserver;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.datastax.driver.core.utils.UUIDs;
+import com.datastax.driver.mapping.Result;
 
 import database.Device;
 import database.Message;
@@ -52,6 +54,22 @@ public class PiController {
 		}
 		
 		return new ResponseEntity<ArrayList<NetworkDevice>>(HttpStatus.NOT_FOUND);
+	}
+	
+	// save configured device to the database
+	@RequestMapping(value="connected", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<List<Device>> getDevices()
+	{
+		List<Device> list = null;
+		Result<Device> results = Helper.getConnectedDevices();
+		list = results.all();
+		
+		if(!(list == null))
+		{
+			return new ResponseEntity<List<Device>>(list, HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);	
 	}
 	
 	// save configured device to the database

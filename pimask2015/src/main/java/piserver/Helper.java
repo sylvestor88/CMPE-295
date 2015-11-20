@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
+import com.datastax.driver.mapping.Result;
 
 import database.CassandraDB;
 import database.Device;
@@ -95,5 +97,15 @@ public class Helper {
 		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
 		UserMapper.save(user);
 		sess.close();
+	}
+	
+	public static Result<Device> getConnectedDevices()
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		ResultSet results = sess.execute("SELECT * FROM connected_devices;");
+		Result<Device> devices = DeviceMapper.map(results);
+		return devices;
 	}
 }
