@@ -26,33 +26,41 @@ var app = angular.module('PiMask',['ngRoute'])
 });
 
 app.controller('FindDevicesController', function($scope, $http){
-	// $http.get('http://localhost:8080/pimask/find_devices')
-	// .success(function(response){
-	 	var response = [
-	 					{"ip": "130.65.100.1", "hostname": "NewPi1"},
-	 					{"ip": "130.65.100.2", "hostname": "NewPi2"},
-	 					{"ip": "130.65.100.3", "hostname": "newPi3"}
-	 							];
+	$http.get('http://localhost:8080/pimask/find_devices')
+	 .success(function(response){
 	 	$scope.names = response;
-	// })
-	// .error(function(){
-	 //	alert("error");
-	// });
+	 })
+	 .error(function(){
+	 	alert("error");
+	 });
 });
 
 app.controller('ShowDevicesController', function($scope, $http){
-	var response = [{"hostname": "Pi1", "ip": "130.65.200.1"},
-					{"hostname": "Pi2", "ip": "130.65.200.2"},
-					{"hostname": "Pi3", "ip": "130.65.200.3"}];
-	$scope.names = response;
+$http.get('http://localhost:8080/pimask/show_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 })
+	 .error(function(){
+	 	alert("error");
+	 });
 });
 
 app.controller('ConfigureDevicesController', function($scope, $http){
-	var response = {};
-	$scope.names = response;
+	$http.get('http://localhost:8080/pimask/configure_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 })
+	 .error(function(){
+	 	alert("error");
+	 });
 });
 
 app.controller('EditDevicesController', function($scope, $http){
-	var response = {};
-	$scope.names = response;
+	$http.get('http://localhost:8080/pimask/edit_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 })
+	 .error(function(){
+	 	alert("error");
+	 });
 });
