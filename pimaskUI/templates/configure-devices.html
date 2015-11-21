@@ -1,0 +1,82 @@
+<section id="configureDevices" class="container content-section">
+  <p> Configure a new Device with PiMask </p>
+  <form>
+  <fieldset class="form-group">
+    <label for="device-name">Device Name</label>
+    <input type="text" class="form-control" id="device-name" placeholder="Camera 1">
+  </fieldset>
+  <label for="motion-detection">Motion Detection</label>
+  <div class="radio">
+    <label>
+      <input type="radio" name="motiondetect" id="motiondetect1" value="ON" checked>
+      ON
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="motiondetect" id="motiondetect2" value="OFF">
+      OFF
+    </label>
+  </div>
+
+  <label for="stream-motion">Stream Motion</label>
+  <div class="radio">
+    <label>
+      <input type="radio" name="streammotion" id="streammotion1" value="ON" checked>
+      ON
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="streammotion" id="streammotion2" value="OFF">
+      OFF
+    </label>
+  </div>
+
+  <label for="stream-local">Stream Localhost</label>
+  <div class="radio">
+    <label>
+      <input type="radio" name="streamlocal" id="streamlocal1" value="ON" checked>
+      ON
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="streamlocal" id="streamlocal2" value="OFF">
+      OFF
+    </label>
+  </div>
+
+  <label for="auto-brightness">Auto Brightness</label>
+  <div class="radio">
+    <label>
+      <input type="radio" name="autobright" id="autobright1" value="ON" checked>
+      ON
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="autobright" id="autobright2" value="OFF">
+      OFF
+    </label>
+  </div>
+<fieldset class="form-group">
+    <label for="light-switch">Light Switch</label>
+    <input type="text" class="form-control" id="lightswitch" placeholder="1 - 100">
+  </fieldset>
+</form>
+ <fieldset class="form-group">
+    <label for="minimum-motion-frames">Minimum motion Frames</label>
+    <input type="text" class="form-control" id="minmotionframes" placeholder="1-5">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="stream-quality">Stream Quality</label>
+    <input type="text" class="form-control" id="streamquality" placeholder="75%">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="max-movie-time">Maximum Movie Time (in seconds)</label>
+    <input type="text" class="form-control" id="maxmovietime" placeholder="30">
+  </fieldset>
+
+   <button type="submit" class="btn btn-primary">Submit</button>
+ </form>
