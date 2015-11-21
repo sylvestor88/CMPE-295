@@ -11,18 +11,19 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.datastax.driver.core.utils.UUIDs;
-import com.datastax.driver.mapping.Result;
-
 import beans.Device;
 import beans.Message;
 import beans.User;
+
+import com.datastax.driver.core.utils.UUIDs;
+import com.datastax.driver.mapping.Result;
 
 @RestController
 @ComponentScan
@@ -82,6 +83,16 @@ public class PiController {
 		}
 		else
 			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);	
+	}
+	
+	// delete a device
+	@RequestMapping(value="deleteDevice/{device_id}", method = RequestMethod.DELETE)
+	public @ResponseBody ResponseEntity<Message> deleteDevice(
+			@PathVariable("device_id") UUID devId)
+	{
+		Helper.deleteDeviceInDB(devId);
+		Message msg = new Message("Device Deleted from the Sever");
+		return new ResponseEntity<Message>(msg, HttpStatus.OK);
 	}
 	
 	// save users to the database

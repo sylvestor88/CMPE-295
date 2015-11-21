@@ -3,6 +3,10 @@ package piserver;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.UUID;
+
+import beans.Device;
+import beans.User;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -10,8 +14,6 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 
-import beans.Device;
-import beans.User;
 import database.CassandraDB;
 
 public class Helper {
@@ -87,6 +89,15 @@ public class Helper {
 		Session sess = db.connect();
 		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
 		DeviceMapper.save(dev);
+		sess.close();
+	}
+	
+	public static void deleteDeviceInDB(UUID devId)
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		DeviceMapper.delete(devId);
 		sess.close();
 	}
 	
