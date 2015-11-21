@@ -20,3 +20,18 @@
     background-color: #000;
 }
 
+#findDevices {
+    margin-top: 75px;
+}
+
+#connectedDevices {
+    margin-top: 75px;
+}
+
+#configureDevices {
+    margin-top: 75px;
+}
+
+#editDevices {
+    margin-top: 75px;
+}
