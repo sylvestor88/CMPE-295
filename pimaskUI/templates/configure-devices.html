@@ -2,9 +2,14 @@
   <p> Configure a new Device with PiMask </p>
   <form>
   <fieldset class="form-group">
-    <label for="device-name">Device Name</label>
-    <input type="text" class="form-control" id="device-name" placeholder="Camera 1">
+    <label for="device_ip">Device IP</label>
+    <input type="text" class="form-control" id="device_ip" ng-value="{{ ip }}">
   </fieldset>
+  <fieldset class="form-group">
+    <label for="device_name">Device Name</label>
+    <input type="text" class="form-control" id="device_name" placeholder="Ex. Living home, Garage">
+  </fieldset>
+
   <label for="motion-detection">Motion Detection</label>
   <div class="radio">
     <label>

@@ -13,54 +13,64 @@ var app = angular.module('PiMask',['ngRoute'])
 	.when('/', {
 		redirectTo:'/connectedDevices'
 	})
-	.when('/configureDevices', {
+	.when('/configureDevice/:id', {
 		templateUrl: 'templates/configure-devices.html',
-		controller: 'ConfigureDevicesController',
-		controllerAs: 'configureDevicesCtrl'
+		controller: 'ConfigureDeviceController',
+		controllerAs: 'configureDeviceCtrl'
 	})
-	.when('/editDevices', {
+	.when('/editDevice', {
 		templateUrl: 'templates/edit-devices.html',
-		controller: 'EditDevicesController',
+		controller: 'EditDeviceController',
 		controllerAs: 'editDevicesCtrl'
 	})
 });
 
 app.controller('FindDevicesController', function($scope, $http){
-	$http.get('http://localhost:8080/pimask/find_devices')
+	
+	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+	
+	/*$http.get('http://localhost:8080/pimask/find_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 })
 	 .error(function(){
-	 	alert("error");
-	 });
+	 	alert("Unable to find any devices");
+	 });*/
 });
 
 app.controller('ShowDevicesController', function($scope, $http){
-$http.get('http://localhost:8080/pimask/show_devices')
+
+	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+/*$http.get('http://localhost:8080/pimask/show_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 })
 	 .error(function(){
 	 	alert("error");
-	 });
+	 });*/
 });
 
-app.controller('ConfigureDevicesController', function($scope, $http){
-	$http.get('http://localhost:8080/pimask/configure_devices')
+app.controller('ConfigureDeviceController', function($scope, $http, $routeParams){
+	
+	$scope.ip = $routeParams.id; 
+	console.log($scope.ip);
+
+	/*$http.get('http://localhost:8080/pimask/configure_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 })
 	 .error(function(){
 	 	alert("error");
-	 });
+	 });*/
 });
 
-app.controller('EditDevicesController', function($scope, $http){
-	$http.get('http://localhost:8080/pimask/edit_devices')
+app.controller('EditDeviceController', function($scope, $http){
+	
+	/*$http.get('http://localhost:8080/pimask/edit_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 })
 	 .error(function(){
 	 	alert("error");
-	 });
+	 });*/
 });

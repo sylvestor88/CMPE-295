@@ -1,14 +1,14 @@
 <section id="findDevices" class="container content-section text-center">
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
-      <p>List of new devices on the network:</p>
+      <p>List of unconfigured devices on the network:</p>
       <table class="table">
         <thead></thead>
           <tbody>
             <tr ng-repeat='name in names'>
               <td>{{ name.ip }}</td>
               <td>{{ name.hostname }}</td>
-              <td><a href="#/configureDevices" data-target= "#configureDevices">Configure</a></td>
+              <td><a href="#/configureDevice/{{ name.ip }}" data-target= "#configureDevices">Configure</a></td>
             </tr>
           </tbody>
       </table> 
