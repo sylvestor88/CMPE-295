@@ -1,4 +1,4 @@
-package database;
+package beans;
 
 public class Message {
 	

@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.datastax.driver.core.utils.UUIDs;
 import com.datastax.driver.mapping.Result;
 
-import database.Device;
-import database.Message;
-import database.User;
+import beans.Device;
+import beans.Message;
+import beans.User;
 
 @RestController
 @ComponentScan

@@ -10,9 +10,9 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 
+import beans.Device;
+import beans.User;
 import database.CassandraDB;
-import database.Device;
-import database.User;
 
 public class Helper {
 	
