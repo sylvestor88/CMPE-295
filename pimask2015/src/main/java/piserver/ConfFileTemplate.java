@@ -4,13 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import beans.ConfFileVariables;
+import beans.Device;
 
 public class ConfFileTemplate {
-	boolean createConfigFile(String file){
-	ConfFileVariables a = new ConfFileVariables();
-	 file = "# @working_schedule_type "+a.getWorking_schedule_type()+"\n"+
+	String createConfigFile(Device a){
+	
+	 String conf_string = "# @working_schedule_type "+a.getWorking_schedule_type()+"\n"+
 			"# @webcam_resolution "+a.getWebcam_resolution()+"\n"+
 			"# @enabled "+a.getEnabled()+"\n"+
 			"# @name "+a.getName()+"\n"+
@@ -75,21 +74,15 @@ public class ConfFileTemplate {
 	 
 //=============End of the string build && begin of the Writing file ===============
 	
-	 boolean writeComplete = writeConffile(file);
-	 if(writeComplete)
-		 return true;
-	 else 
-		 return false;
+	return writeConffile(conf_string,a.getData_location());
+	 
 	}
 	
 //==============Writing config file to the directory =====================	
 	
-	public static boolean writeConffile(String conf){
+	public static String writeConffile(String conf,String location){
 		try {
-
-			File file = new File("/Users/kalyanvallamsetla/Desktop/thread-1.conf");
-
-//========= if file doesnt exists, then create it ========================
+			File file = new File(location);
 			if (!file.exists()) {
 				file.createNewFile();
 			}
@@ -99,11 +92,11 @@ public class ConfFileTemplate {
 			bw.write(conf);
 			bw.close();
 
-			return true;
+			return location; //retuns the location of the file when file has been created successfully
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return "failed to write to file";
 		}
 	}
 }

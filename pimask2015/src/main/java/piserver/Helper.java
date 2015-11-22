@@ -1,6 +1,10 @@
 package piserver;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -16,7 +20,7 @@ import database.CassandraDB;
 
 public class Helper {
 	
-	
+//==================get Ip of the device ===============================================
 	public static String executeGetInet(String command) {
 
 		Process p;
@@ -38,6 +42,7 @@ public class Helper {
 		
 		return null;
 	}
+//======================retrieve the list of connected devices ===================================
 	
 	public static ArrayList<NetworkDevice> executeGetDevices(String command, String currentIp) {
 
@@ -74,13 +79,13 @@ public class Helper {
 
 		return deviceList;
 	}
-
+//========================get subnet mask of the network ========================
 	public static String getSubnet(String currentIP) {
 		int firstSeparator = 0;
 		int lastSeparator = currentIP.lastIndexOf(".");
 		return currentIP.substring(firstSeparator, lastSeparator + 1);
 	}
-	
+//=========================Save the discovered devices to Database===============	
 	public static void saveDeviceInDB(Device dev)
 	{
 		CassandraDB db = new CassandraDB();
@@ -89,7 +94,7 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
-	
+//========================Save users into the database ============================	
 	public static void saveUserInDB(User user)
 	{
 		CassandraDB db = new CassandraDB();
@@ -98,7 +103,7 @@ public class Helper {
 		UserMapper.save(user);
 		sess.close();
 	}
-	
+//=============================Discover connected devices ===========================	
 	public static Result<Device> getConnectedDevices()
 	{
 		CassandraDB db = new CassandraDB();
@@ -108,7 +113,7 @@ public class Helper {
 		Result<Device> devices = DeviceMapper.map(results);
 		return devices;
 	}
-	
+//============================Retreive list of Users =================================	
 	public static Result<User> getUsers()
 	{
 		CassandraDB db = new CassandraDB();
@@ -118,4 +123,43 @@ public class Helper {
 		Result<User> users = UserMapper.map(results);
 		return users;
 	}
+//============================pushing the configuration into the device==================
+	public static String executePushConfFile(String host,String password){
+		String command = "sshpass -p 'password' scp -r /home/user/desktop/thread-1.conf user@"+
+							host+":/path/to/foo /home/user/Desktop/" ;
+		String line = "";
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			
+			while ((line += reader.readLine() +"\n") != null) {
+				}
+				p.destroy();
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		restart(host,password);
+		return line;
+	}
+//======================Restart the camera=========================
+	public static void restart(String host,String password){
+		String [] command = {"sshpass -p "+password+" ssh user@"+host,"reboot"};
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			p.destroy();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+		
 }
