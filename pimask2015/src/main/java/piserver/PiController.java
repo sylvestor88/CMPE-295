@@ -90,7 +90,7 @@ public class PiController {
 	public @ResponseBody ResponseEntity<Message> deleteDevice(
 			@PathVariable("device_id") UUID devId)
 	{
-		Helper.deleteDeviceInDB(devId);
+		//Helper.deleteDeviceInDB(devId);
 		Message msg = new Message("Device Deleted from the Sever");
 		return new ResponseEntity<Message>(msg, HttpStatus.OK);
 	}

@@ -3,6 +3,7 @@ package piserver;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -90,8 +91,18 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
+//=========================Delete Device from server ============================
+	public static void deleteDeviceInDB(UUID devId)
 
-		
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		DeviceMapper.delete(devId);
+		sess.close();
+	}
+
+
 	
 		
 	
