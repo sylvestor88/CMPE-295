@@ -1,10 +1,6 @@
 package piserver;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -94,7 +90,11 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
-//========================Save users into the database ============================	
+
+		
+	
+		
+	
 	public static void saveUserInDB(User user)
 	{
 		CassandraDB db = new CassandraDB();
