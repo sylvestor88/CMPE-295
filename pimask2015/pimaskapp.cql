@@ -36,23 +36,36 @@ CREATE TABLE IF NOT EXISTS pimaskapp.connected_devices (
 	quality int,
 	post_capture int,
 	noise_level int,
+	on_event_end text,
 	text_left text,
 	pre_capture int,
 	noise_tune text,
+	picture_filename text,
 	locate_motion_style text,
 	locate_motion_mode text,
 	contrast int,
 	stream_maxrate int,
+	output_pictures text,
 	hue int,
-	saturation int;
+	saturation int,
 	stream_localhost text,
+	videodevice text,
+	ffmpeg_variable_bitrate int,
+	ffmpeg_video_codec text,
+	text_changes text,
+	movie_filename text,
 	event_gap int,
 	auto_brightness text,
+	stream_port int,
 	rotate int,
+	text_right text,
+	on_event_start text,
+	ffmpeg_bps int,
 	brightness int,
 	framerate int,
 	max_movie_time int,
 	emulate_motion text,
+	snapshot_filename text,
 	minimum_motion_frames int
 );
 
@@ -60,6 +73,5 @@ CREATE TABLE IF NOT EXISTS pimaskapp.users (
 	userid text PRIMARY KEY,
 	first_name text,
 	last_name text,
-	notification boolean,
-
+	notification boolean
 );
