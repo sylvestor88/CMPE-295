@@ -1,19 +1,42 @@
 <section id="configureDevices" class="container content-section">
   <p> Configure a new Device with PiMask </p>
   <form>
+  <details>
+  <summary>Device Details</summary>
   <fieldset class="form-group">
+    <label for="device_name">Device Name</label>
+    <input ng-model="device.device_name" type="text" class="form-control" id="device_name" placeholder="Camera 1">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="user_name">User Name</label>
+    <input ng-model="device.user_name" type="text" class="form-control" id="user_name" placeholder="picamera">
+  </fieldset>
+
+  <fieldset disabled>
+    <div class="form-group">
+      <label for="ip">IP</label>
+      <input ng-model="device.ip" type="text" id="ip" class="form-control" placeholder="130.65.156.78">
+    </div>
+ 
+                          <!--Check the Angular JS code for radio buttons -->
+  </fieldset>  
+  </details>
+  <details>
+  <summary>Motion Settings</summary>
     <label for="device_ip">Device IP</label>
     <input ng-model="" type="text" class="form-control" id="device_ip" ng-value="ip">
   </fieldset>
+  
   <fieldset class="form-group">
     <label for="device_name">Device Name</label>
     <input type="text" class="form-control" id="device_name" placeholder="Ex. Living home, Garage">
   </fieldset>
-
+ 
   <label for="motion-detection">Motion Detection</label>
-  <div class="radio">
+  <div ng-repeat="option in motionDetectionOptions" class="radio">
     <label>
-      <input type="radio" name="motiondetect" id="motiondetect1" value="ON" checked>
+      <input ng-model="" type="radio" name="motiondetect" id="motiondetect1" value="ON" checked>
       ON
     </label>
   </div>
@@ -23,6 +46,19 @@
       OFF
     </label>
   </div>
+  </details>
+  
+  <details>
+  <summary>Video Settings</summary>
+  <fieldset class="form-group">
+    <label for="target_dir">Target Directory</label>
+    <input ng-model="device.target_dir" type="text" class="form-control" id="target_dir" placeholder="/data/output">
+  </fieldset>
+
+  <fieldset class="form-group">
+    <label for="frame_rate">Frame Rate</label>
+    <input ng-model="device.frame_rate" type="text" class="form-control" id="frame_rate" placeholder="20">
+  </fieldset>
 
   <label for="stream-motion">Stream Motion</label>
   <div class="radio">
@@ -38,6 +74,13 @@
     </label>
   </div>
 
+  <fieldset disabled>
+    <div class="form-group">
+      <label for="stream_port">Stream Port</label>
+      <input ng-model="device.stream_port" type="text" id="stream_port" class="form-control" placeholder="8081">
+    </div>
+  </fieldset>
+
   <label for="stream-local">Stream Localhost</label>
   <div class="radio">
     <label>
@@ -51,7 +94,10 @@
       OFF
     </label>
   </div>
+</details>
 
+ <details>
+  <summary>Stream Settings</summary>
   <label for="auto-brightness">Auto Brightness</label>
   <div class="radio">
     <label>
@@ -65,23 +111,79 @@
       OFF
     </label>
   </div>
+
+
 <fieldset class="form-group">
-    <label for="light-switch">Light Switch</label>
-    <input type="text" class="form-control" id="lightswitch" placeholder="1 - 100">
-  </fieldset>
-</form>
- <fieldset class="form-group">
-    <label for="minimum-motion-frames">Minimum motion Frames</label>
-    <input type="text" class="form-control" id="minmotionframes" placeholder="1-5">
-  </fieldset>
-  <fieldset class="form-group">
-    <label for="stream-quality">Stream Quality</label>
-    <input type="text" class="form-control" id="streamquality" placeholder="75%">
-  </fieldset>
-  <fieldset class="form-group">
-    <label for="max-movie-time">Maximum Movie Time (in seconds)</label>
-    <input type="text" class="form-control" id="maxmovietime" placeholder="30">
+    <label for="light_switch">Light Switch</label>
+    <input ng-model="device.light_switch" type="text" class="form-control" id="light_switch" placeholder="1 - 100">
   </fieldset>
 
-   <button type="submit" class="btn btn-primary">Submit</button>
+
+ <fieldset class="form-group">
+    <label for="minimum_motion_frames">Minimum motion Frames</label>
+    <input ng-model="device.minimum_motion_frames" type="text" class="form-control" id="min_motion_frames" placeholder="1-5">
+  </fieldset>
+
+
+  <fieldset class="form-group">
+    <label for="stream_quality">Stream Quality</label>
+    <input ng-model="device.stream_quality" type="text" class="form-control" id="stream_quality" placeholder="75%">
+  </fieldset>
+
+
+  <fieldset class="form-group">
+    <label for="max_movie_time">Maximum Movie Time (in seconds)</label>
+    <input ng-model="device.max_movie_time" type="text" class="form-control" id="max_movie_time" placeholder="30">
+  </fieldset>
+</details>
+
+ <details>
+  <summary>Camera Setting</summary>
+  <label>Workday Schedule</label>
+  <div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Monday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Tuesday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Wednesday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Thursday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Friday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Saturday
+  </label>
+</div>
+<div class="checkbox">
+  <label>
+    <input type="checkbox" value="">
+    Sunday
+  </label>
+</div>
+</details>
+
+<br>
+  <button type="submit" class="btn btn-primary">Submit</button>
  </form>
