@@ -70,8 +70,10 @@ CREATE TABLE IF NOT EXISTS pimaskapp.connected_devices (
 );
 
 CREATE TABLE IF NOT EXISTS pimaskapp.users (
-	userid text PRIMARY KEY,
+	user_id UUID,
+	email text,
 	first_name text,
 	last_name text,
-	notification boolean
+	notification boolean,
+	PRIMARY KEY ((user_id), email)
 );

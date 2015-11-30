@@ -1,0 +1,41 @@
+<form name="userForm" class="userForm" ng-submit="addUser()" novalidate>
+  <fieldset class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" class="form-control" id="email" placeholder="Ex: something@xyz.com" ng-model="newUser.email" required>
+    <small class="text-muted">Make sure the email does not already exist in the below list.</small>
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="firstName">First Name</label>
+    <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="newUser.first_name">
+  </fieldset>
+   <fieldset class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" class="form-control" id="lastName" placeholder="Last Name" ng-model="newUser.last_name">
+  </fieldset>
+  <fieldset class="form-group">
+    <label for="notification">Receive Notification?</label>
+    <select class="form-control" id="notification" ng-model="newUser.notification" required>
+      <option value='true'>Yes</option>
+      <option value='false'>No</option>
+    </select>
+  </fieldset>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<section id="currentUsers" class="container content-section text-center">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+      <p>List of registered users:</p>
+      <table class="table">
+        <thead></thead>
+          <tbody>
+            <tr ng-repeat='user in users'>
+              <td>{{ user.email }}</td>
+              <td>{{ user.first_name }}  {{ user.last_name }}</td>
+              <td><a href="#/editUser/{{user.user_id}}" class="btn btn-xs btn-primary" data-target="editUser">Edit</a>&nbsp;&nbsp;<a ng-click="deleteUser(user)" class="btn btn-xs btn-primary">Delete</a></td>
+            </tr>
+          </tbody>
+      </table> 
+    </div>
+  </div>
+</section>

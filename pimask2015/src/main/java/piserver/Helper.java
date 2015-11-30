@@ -105,16 +105,24 @@ public class Helper {
 		sess.close();
 	}
 
-
-	
-		
-	
+//=========================Save User in the server ============================
 	public static void saveUserInDB(User user)
 	{
 		CassandraDB db = new CassandraDB();
 		Session sess = db.connect();
 		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
 		UserMapper.save(user);
+		sess.close();
+	}
+
+//=========================Save User in the server ============================
+	public static void deleteUserInDB(UUID userId)
+
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
+		UserMapper.delete(userId);
 		sess.close();
 	}
 //=============================Discover connected devices ===========================	
@@ -125,9 +133,10 @@ public class Helper {
 		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
 		ResultSet results = sess.execute("SELECT * FROM connected_devices;");
 		Result<Device> devices = DeviceMapper.map(results);
+		sess.close();
 		return devices;
 	}
-//============================Retreive list of Users =================================	
+//============================Retrieve list of Users =================================	
 	public static Result<User> getUsers()
 	{
 		CassandraDB db = new CassandraDB();
@@ -135,8 +144,21 @@ public class Helper {
 		Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
 		ResultSet results = sess.execute("SELECT * FROM users;");
 		Result<User> users = UserMapper.map(results);
+		sess.close();
 		return users;
 	}
+	
+	//============================Retrieve single user =================================	
+		public static User getUserById(UUID userId)
+		{
+			CassandraDB db = new CassandraDB();
+			Session sess = db.connect();
+			Mapper<User> UserMapper = new MappingManager(sess).mapper(User.class);
+			User user = UserMapper.get(userId);
+			sess.close();
+			return user;
+		}
+		
 //============================pushing the configuration into the device==================
 	public static void executePushConfFile(String host,String password){
 		String command = "sshpass -p '"+password+"' scp -r /home/user/desktop/thread-1.conf admin@"+
