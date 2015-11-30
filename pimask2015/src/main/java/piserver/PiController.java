@@ -95,13 +95,29 @@ public class PiController {
 		return new ResponseEntity<Message>(msg, HttpStatus.OK);
 	}
 	
-	// save users to the database
+	// save user to the database
 	@RequestMapping(value="save_user", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> saveUser(@Valid @RequestBody User user)
 	{
+		UUID id = UUIDs.random();
+		user.setUser_id(id);
 		Helper.saveUserInDB(user);
-		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getUserid() + " saved.");
+		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " saved.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+	
+	// get a user from the database
+	@RequestMapping(value="users/{user_id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<User> getUserById(
+			@PathVariable("user_id") UUID userId)
+	{
+		User user = Helper.getUserById(userId);
+		if(!(user == null))
+		{
+			return new ResponseEntity<User>(user, HttpStatus.OK);
+		}
+		else
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);	
 	}
 	
 	// get list of users from the database
@@ -119,6 +135,26 @@ public class PiController {
 		else
 			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);	
 	}
+	
+	//Update user in the database
+	@RequestMapping(value="edit_user/{user_id}", method=RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> editUser(
+			@RequestBody User user, @PathVariable("user_id") UUID userId)
+	{
+		Helper.saveUserInDB(user);;
+		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " saved.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+	
+	//Delete user from the database
+		@RequestMapping(value="delete_user/{user_id}", method=RequestMethod.DELETE, produces = "application/json")
+		public @ResponseBody ResponseEntity<Message> deleteUser(
+				@PathVariable("user_id") UUID userId)
+		{
+			Helper.deleteUserInDB(userId);
+			Message msg = new Message("User Deleted from the Sever");
+			return new ResponseEntity<Message>(msg, HttpStatus.OK);
+		}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

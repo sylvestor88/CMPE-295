@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.UUID;
+
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
@@ -7,17 +9,23 @@ import com.datastax.driver.mapping.annotations.Table;
 public class User {
 	
 	@PartitionKey
-	private String userid;
+	private UUID user_id;
 	
+	private String email;
 	private String first_name;
 	private String last_name;
 	private boolean notification;
-	
-	public String getUserid() {
-		return userid;
+	public UUID getUser_id() {
+		return user_id;
 	}
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setUser_id(UUID user_id) {
+		this.user_id = user_id;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getFirst_name() {
 		return first_name;

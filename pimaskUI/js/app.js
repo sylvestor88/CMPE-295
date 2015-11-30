@@ -20,6 +20,16 @@ var app = angular.module('PiMask',['ngRoute'])
 		controller: 'EditDeviceController',
 		controllerAs: 'editDevicesCtrl'
 	})
+	.when('/addUser', {
+		templateUrl: 'templates/add-user.html',
+		controller: 'AddUserController',
+		controllerAs: 'AddUserCtrl'
+	})
+	.when('/editUser/:id', {
+		templateUrl: 'templates/edit-user.html',
+		controller: 'EditUserController',
+		controllerAs: 'EditUserCtrl'
+	})
 	.when('/', {
 		redirectTo:'/connectedDevices'
 	})
@@ -95,4 +105,53 @@ app.controller('EditDeviceController', function($scope, $http){
 	 .error(function(){
 	 	alert("error");
 	 });*/
+});
+
+app.controller('AddUserController', function($scope, $http, $route){
+
+	$scope.newUser = {};
+
+	$http({
+			method: 'GET',
+			url: 'http://localhost:8080/pimask/users'
+		})
+		.success(function(data){
+			$scope.users = data;
+		});
+
+	$scope.addUser = function(){
+		
+		console.log($scope.newUser);
+		$http({
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/save_user',
+			headers: {'Content-Type': 'application/json'},
+			data: $scope.newUser
+		})
+		.success(function(data){
+			alert(data.message);
+			$route.reload();
+		})
+		.error(function(data){
+			alert(data.message);
+		});
+
+		$scope.newUser = {};
+	}
+
+	$scope.deleteUser = function(user){
+
+		var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+		$http({
+			method: 'DELETE',
+			url: URL
+		})
+		.success(function(data){
+			alert(data.message);
+			$route.reload();
+		})
+		.error(function(data){
+			alert(data.message);
+		});
+	};
 });
