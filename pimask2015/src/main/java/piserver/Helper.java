@@ -125,7 +125,7 @@ public class Helper {
 //============================pushing the configuration into the device==================
 	public static void executePushConfFile(String host,String password){
 		String command = "sshpass -p '"+password+"' scp -r /home/user/desktop/thread-1.conf admin@"+
-							host+":/path/to/foo /home/user/Desktop/" ;
+							host+":/data/etc" ;
 		executeCommand(command);
 		restart(host,password);
 		
