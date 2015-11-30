@@ -62,17 +62,17 @@ public class Device {
 	private int saturation = 0;
 	private String stream_localhost ="on";
 	private String videodevice ="/dev/video0";
-	private String ffmpeg_variable_bitrate ="0";
+	private int ffmpeg_variable_bitrate = 0;
 	private String ffmpeg_video_codec ="msmpeg4";
 	private String text_changes ="off";
 	private String movie_filename ="%Y-%m-%d/%H-%M-%S";
 	private int event_gap = 10;
 	private String auto_brightness ="off";
-	private String stream_port ="8081";
+	private int stream_port = 8081;
 	private int rotate = 0;
 	private String text_right ="%Y-%m-%d\\n%T";
 	private String on_event_start ="/usr/bin/python /usr/lib/python2.7/site-packages/motioneye/meyectl.pyc relayevent -c /data/etc/motioneye.conf -l start %t";
-	private String ffmpeg_bps ="44544";
+	private int ffmpeg_bps = 44544;
 	private int brightness = 0;
 	private int framerate = 2;
 	private int max_movie_time = 30;
@@ -375,10 +375,10 @@ public class Device {
 	public void setVideodevice(String videodevice) {
 		this.videodevice = videodevice;
 	}
-	public String getFfmpeg_variable_bitrate() {
+	public int getFfmpeg_variable_bitrate() {
 		return ffmpeg_variable_bitrate;
 	}
-	public void setFfmpeg_variable_bitrate(String ffmpeg_variable_bitrate) {
+	public void setFfmpeg_variable_bitrate(int ffmpeg_variable_bitrate) {
 		this.ffmpeg_variable_bitrate = ffmpeg_variable_bitrate;
 	}
 	public String getFfmpeg_video_codec() {
@@ -411,10 +411,10 @@ public class Device {
 	public void setAuto_brightness(String auto_brightness) {
 		this.auto_brightness = auto_brightness;
 	}
-	public String getStream_port() {
+	public int getStream_port() {
 		return stream_port;
 	}
-	public void setStream_port(String stream_port) {
+	public void setStream_port(int stream_port) {
 		this.stream_port = stream_port;
 	}
 	public int getRotate() {
@@ -435,10 +435,10 @@ public class Device {
 	public void setOn_event_start(String on_event_start) {
 		this.on_event_start = on_event_start;
 	}
-	public String getFfmpeg_bps() {
+	public int getFfmpeg_bps() {
 		return ffmpeg_bps;
 	}
-	public void setFfmpeg_bps(String ffmpeg_bps) {
+	public void setFfmpeg_bps(int ffmpeg_bps) {
 		this.ffmpeg_bps = ffmpeg_bps;
 	}
 	public int getBrightness() {
@@ -476,5 +476,5 @@ public class Device {
 	}
 	public void setMinimum_motion_frames(int minimum_motion_frames) {
 		this.minimum_motion_frames = minimum_motion_frames;
-	}	
+	}
 }
