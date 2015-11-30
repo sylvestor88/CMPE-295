@@ -84,16 +84,54 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 
 app.controller('ConfigureDeviceController', function($scope, $http, $routeParams){
 	
-	$scope.ip = $routeParams.id; 
-	console.log($scope.ip);
+	$scope.device={};
+	$scope.ip = $routeParams.id;
 
-	/*$http.get('http://localhost:8080/pimask/configure_devices')
-	 .success(function(response){
-	 	$scope.names = response;
-	 })
-	 .error(function(){
-	 	alert("error");
-	 });*/
+	$scope.submitForm = function(){
+		var brightnessInfo = parseInt($scope.device.brightness*2.55);
+		var contrastInfo = parseInt($scope.device.contrast*2.55);
+		var saturationInfo = parseInt($scope.device.saturation*2.55);
+		var video_resolutionInfo = $scope.device.video_resolution.split("x");
+		var heightInfo = parseInt(video_resolutionInfo[1]);
+		var widthInfo = parseInt(video_resolutionInfo[0]);
+		var preserve_moviesInfo = parseInt($scope.device.preserve_movies);
+		var video_rotationInfo = parseInt($scope.device.video_rotation);
+
+		var working_scheduleInfo = String($scope.device.working_schedule.monday+"|"+$scope.device.working_schedule.tuesday+"|"
+			+$scope.device.working_schedule.wednesday+"|"+$scope.device.working_schedule.thursday+"|"
+			+$scope.device.working_schedule.friday+"|"+$scope.device.working_schedule.saturday+"|"
+			+$scope.device.working_schedule.sunday);
+		alert(working_scheduleInfo);
+		
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $routeParams.id,
+ 		brightness: brightnessInfo,
+ 		contrast: contrastInfo ,
+ 		saturation: saturationInfo,
+ 		height: heightInfo,
+ 		width: widthInfo,
+ 		video_rotation: video_rotationInfo,
+ 		frame_rate: $scope.device.frame_rate,
+ 		stream_max_rate: $scope.device.stream_max_rate,
+ 		stream_quality: $scope.device.stream_quality,
+ 		max_movie_time: $scope.device.max_movie_time,
+ 		preserve_movies: preserve_moviesInfo,
+ 		motion_gap: $scope.device.motion_gap,
+ 		pre_capture: $scope.device.pre_capture,
+ 		post_capture: $scope.device.post_capture,
+ 		minimum_motion_frames: $scope.device.minimum_motion_frames,
+ 		working_schedule: working_scheduleInfo
+ 		};
+
+ 		var wirelessInfo = {
+ 			ssid: $scope.device.ssid,
+ 			passwors: $scope.device.password
+ 		};
+
+		console.log(deviceInfo);
+	};
+
 });
 
 app.controller('EditDeviceController', function($scope, $http){
