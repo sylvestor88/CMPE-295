@@ -67,18 +67,25 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 
 	 $scope.deleteDevice = function(name){
 
-	 	var URL = 'http://localhost:8080/pimask/deleteDevice/' + name.device_id;	
-		$http({
-			method: 'DELETE',
-			url: URL
-		})
-		.success(function(data){
-			alert(data.message);
+	 	var x;
+		
+		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
+			var URL = 'http://localhost:8080/pimask/deleteDevice/' + name.device_id;	
+			$http({
+				method: 'DELETE',
+				url: URL
+			})
+			.success(function(data){
+				alert(data.message);
+				$route.reload();
+			})
+			.error(function(data){
+				alert(data.message);
+			});
+		} else{
+
 			$route.reload();
-		})
-		.error(function(data){
-			alert(data.message);
-		});
+		}
 	 };
 });
 
@@ -179,14 +186,64 @@ app.controller('AddUserController', function($scope, $http, $route){
 
 	$scope.deleteUser = function(user){
 
-		var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+		var x;
+		
+		if(confirm("User " + user.email + " will be deleted. Are you sure?") == true){
+
+			var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+			$http({
+				method: 'DELETE',
+				url: URL
+			})
+			.success(function(data){
+				alert(data.message);
+				$route.reload();
+			})
+			.error(function(data){
+				alert(data.message);
+			});
+		} else {
+
+			$route.reload();
+		}
+	};
+});
+
+app.controller('EditUserController', function($scope, $http, $routeParams, $location){
+
+	$scope.id = $routeParams.id;
+	$scope.user = {};
+	//console.log($scope.id);
+
+	$http({
+			method: 'GET',
+			url: 'http://localhost:8080/pimask/users/' + $scope.id
+		})
+		.success(function(data){
+			$scope.user = data;
+			
+			if(data.notification == true)
+			{
+				$scope.user.notification = "true";
+			} else
+			{
+				$scope.user.notification = "false";
+			}
+			//console.log($scope.user);
+		});
+
+	$scope.editUser = function(){
+		
+		//console.log($scope.user);
 		$http({
-			method: 'DELETE',
-			url: URL
+			method: 'PUT',
+			url: 'http://localhost:8080/pimask/edit_user/' + $scope.user.user_id,
+			headers: {'Content-Type': 'application/json'},
+			data: $scope.user
 		})
 		.success(function(data){
 			alert(data.message);
-			$route.reload();
+			$location.path('/addUser');
 		})
 		.error(function(data){
 			alert(data.message);

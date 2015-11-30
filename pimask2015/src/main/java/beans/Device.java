@@ -32,7 +32,7 @@ public class Device {
 	private String webcam_server_resize ="off";
 	private String network_share_name = "data";
 	
-//configuration details which needs to be obtained from the user
+	//configuration details which needs to be obtained from the user
 	private int lightswitch = 50;
 	private String stream_authenticationuser =":pass";
 	private int snapshot_interval = 0;

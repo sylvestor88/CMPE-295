@@ -1,23 +1,22 @@
-<form name="userForm" class="userForm" ng-submit="editUser(editUser)" novalidate>
+<form name="userForm" class="userForm" ng-submit="userForm.$valid && editUser(user)" novalidate>
   <fieldset class="form-group">
     <label for="email">Email address</label>
-    <input type="email" class="form-control" id="email" placeholder="Ex: something@xyz.com" ng-model="editUser.userid" ng-value="user.email" required>
-    <small class="text-muted">Make sure the email does not already exist in the below list.</small>
+    <input type="email" class="form-control" id="email" placeholder="Ex: something@xyz.com" ng-model="user.email" required>
   </fieldset>
   <fieldset class="form-group">
     <label for="firstName">First Name</label>
-    <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="editUser.first_name" ng-value="user.first_name">
+    <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="user.first_name" >
   </fieldset>
    <fieldset class="form-group">
     <label for="lastName">Last Name</label>
-    <input type="text" class="form-control" id="lastName" placeholder="Last Name" ng-model="editUser.last_name" ng-value="user.last_name">
+    <input type="text" class="form-control" id="lastName" placeholder="Last Name" ng-model="user.last_name" >
   </fieldset>
   <fieldset class="form-group">
     <label for="notification">Receive Notification?</label>
-    <select class="form-control" id="notification" ng-model="editUser.notification" ng-value="user.notification" required>
+    <select class="form-control" id="notification" ng-model="user.notification" required>
       <option value='true'>Yes</option>
       <option value='false'>No</option>
     </select>
   </fieldset>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary">Update</button>
 </form>
