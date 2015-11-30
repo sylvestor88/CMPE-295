@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -93,7 +94,21 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
-//========================Save users into the database ============================	
+//=========================Delete Device from server ============================
+	public static void deleteDeviceInDB(UUID devId)
+
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		DeviceMapper.delete(devId);
+		sess.close();
+	}
+
+
+	
+		
+	
 	public static void saveUserInDB(User user)
 	{
 		CassandraDB db = new CassandraDB();
