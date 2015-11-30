@@ -62,6 +62,7 @@ public class PiController {
 		{
 			UUID id = UUIDs.random();
 			dev.setDevice_id(id);
+			
 			Helper.saveDeviceInDB(dev);
 			Message msg = new Message("Device " + dev.getDevice_name() + " with IP " + dev.getDevice_ip() + " is now connected.");
 			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);

@@ -1,10 +1,9 @@
 package piserver;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -124,41 +123,46 @@ public class Helper {
 		return users;
 	}
 //============================pushing the configuration into the device==================
-	public static String executePushConfFile(String host,String password){
-		String command = "sshpass -p 'password' scp -r /home/user/desktop/thread-1.conf user@"+
+	public static void executePushConfFile(String host,String password){
+		String command = "sshpass -p '"+password+"' scp -r /home/user/desktop/thread-1.conf admin@"+
 							host+":/path/to/foo /home/user/Desktop/" ;
-		String line = "";
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec(command);
-			p.waitFor();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-			
-			while ((line += reader.readLine() +"\n") != null) {
-				}
-				p.destroy();
-			}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		executeCommand(command);
 		restart(host,password);
-		return line;
+		
 	}
 //======================Restart the camera=========================
 	public static void restart(String host,String password){
-		String [] command = {"sshpass -p "+password+" ssh user@"+host,"reboot"};
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec(command);
-			p.waitFor();
-			p.destroy();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		String command = "sshpass -p "+password+" ssh user@"+host+" reboot";
+		executeCommand(command);
 		
 	}
+//=======================command executer ===============================
+	static void executeCommand(String COMMAND){
+
+		String[] SHELL_COMMAND = {"/bin/sh","-c",COMMAND};
+			String line = "";
+			Process p;
+			try {
+				p = Runtime.getRuntime().exec(SHELL_COMMAND);
+				p.waitFor();
+				System.out.print(loadStream(p.getInputStream()));
+	            System.err.print(loadStream(p.getErrorStream()));
+	        
+					p.destroy();
+				}
+			catch(IOException | InterruptedException ioe) {
+	            ioe.printStackTrace();
+	        }
+	}
+	static String loadStream(InputStream in) throws IOException {
+        int ptr = 0;
+        in = new BufferedInputStream(in);
+        StringBuffer buffer = new StringBuffer();
+        while( (ptr = in.read()) != -1 ) {
+            buffer.append((char)ptr);
+        }
+        return buffer.toString();
+    }
 	
 	
 		
