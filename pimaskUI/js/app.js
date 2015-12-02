@@ -37,15 +37,15 @@ var app = angular.module('PiMask',['ngRoute'])
 
 app.controller('FindDevicesController', function($scope, $http){
 	
-	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+	//$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
 	
-	/*$http.get('http://localhost:8080/pimask/find_devices')
+	$http.get('http://localhost:8080/pimask/find_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 })
 	 .error(function(){
 	 	alert("Unable to find any devices");
-	 });*/
+	 });
 });
 
 app.controller('ShowDevicesController', function($scope, $http, $route, $routeParams){
