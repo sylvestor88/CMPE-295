@@ -160,16 +160,18 @@ public class Helper {
 		}
 		
 //============================pushing the configuration into the device==================
-	public static void executePushConfFile(String host,String password){
-		String command = "sshpass -p '"+password+"' scp -r /home/user/desktop/thread-1.conf admin@"+
-							host+":/data/etc" ;
+	public static void executePushConfFile(String host){
+		String command = "sshpass -p \'pass\' scp -r /home/user/desktop/thread-1.conf admin@" +
+							host + ":/data/etc" ;
+		System.out.println(command);
 		executeCommand(command);
-		restart(host,password);
+		restart(host);
 		
 	}
 //======================Restart the camera=========================
-	public static void restart(String host,String password){
-		String command = "sshpass -p "+password+" ssh user@"+host+" reboot";
+	public static void restart(String host){
+		String command = "sshpass -p \'pass\' ssh admin@"+ host + " reboot";
+		System.out.println(command);
 		executeCommand(command);
 		
 	}

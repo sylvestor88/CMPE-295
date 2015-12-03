@@ -89,7 +89,7 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 	 };
 });
 
-app.controller('ConfigureDeviceController', function($scope, $http, $routeParams){
+app.controller('ConfigureDeviceController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device={};
 	$scope.ip = $routeParams.id;
@@ -108,11 +108,11 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 			+$scope.device.working_schedule.wednesday+"|"+$scope.device.working_schedule.thursday+"|"
 			+$scope.device.working_schedule.friday+"|"+$scope.device.working_schedule.saturday+"|"
 			+$scope.device.working_schedule.sunday);
-		alert(working_scheduleInfo);
 		
 		var deviceInfo = {
  		name: $scope.device.name,
  		device_ip: $routeParams.id,
+ 		live_streaming: "http://" + $routeParams.id + ":8081",
  		brightness: brightnessInfo,
  		contrast: contrastInfo ,
  		saturation: saturationInfo,
@@ -136,7 +136,19 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
  			passwors: $scope.device.password
  		};
 
-		console.log(deviceInfo);
+		$http({
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/save_device',
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			alert(data.message);
+			$location('/connectedDevices')
+		})
+		.error(function(data){
+			alert(data.message);
+		});
 	};
 
 });

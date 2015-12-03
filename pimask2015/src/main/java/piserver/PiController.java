@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.datastax.driver.core.utils.UUIDs;
+import com.datastax.driver.mapping.Result;
+
 import beans.Device;
 import beans.Message;
 import beans.User;
-
-import com.datastax.driver.core.utils.UUIDs;
-import com.datastax.driver.mapping.Result;
 
 @RestController
 @ComponentScan
@@ -32,6 +32,7 @@ import com.datastax.driver.mapping.Result;
 public class PiController {
 	
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
+	String serverIP;
 	
 	// finds devices on the same network as the Pi Server
 	@RequestMapping(value = "find_devices", method = RequestMethod.GET, produces = "application/json")
@@ -47,6 +48,7 @@ public class PiController {
 		}
 
 		String subnet = Helper.getSubnet(currentIp);
+		serverIP = currentIp;
 		ArrayList<NetworkDevice> deviceList = Helper.executeGetDevices("nmap -sP " + subnet + "1-255", currentIp);
 		
 		if(!deviceList.isEmpty())
@@ -63,8 +65,10 @@ public class PiController {
 		{
 			UUID id = UUIDs.random();
 			dev.setDevice_id(id);
-			
-			Helper.saveDeviceInDB(dev);
+			dev.setNetwork_server(serverIP);
+			dev.setTarget_dir("/data/media/motioneye_" + serverIP.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+			ConfFileTemplate.createConfigFile(dev);
+			Helper.executePushConfFile(dev.getDevice_ip());
 			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
 			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 		}

@@ -11,7 +11,7 @@ public class Device {
 	@PartitionKey
 	private UUID device_id;
 	private String device_ip;
-	private boolean notification;
+	private boolean notification = true;
 	private String data_location;
 	private String live_streaming;
 
@@ -20,20 +20,20 @@ public class Device {
 	private int webcam_resolution = 100;
 	private String enabled ="on";
 	private String name ="Camera1";
-	private String network_server ;
+	private String network_share_name = "pimaskoutput";
+	private String network_server;
 	private String motion_detection ="on";
 	private int preserve_pictures = 0;
+	private String storage_device ="network-share";
 	private int preserve_movies = 1;
-	private String storage_device ="custom-path";
-	private String network_username ;
-	private String network_password ;
+	private String network_username = "pi" ;
+	private String network_password = "pimask";
 	private int id = 1;
 	private String working_schedule ;
 	private String webcam_server_resize ="off";
-	private String network_share_name = "data";
 	
 	//configuration details which needs to be obtained from the user
-	private int lightswitch = 50;
+	private int lightswitch = 0;
 	private String stream_authenticationuser =":pass";
 	private int snapshot_interval = 0;
 	private String ffmpeg_output_movies ="on";
