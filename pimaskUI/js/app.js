@@ -15,7 +15,7 @@ var app = angular.module('PiMask',['ngRoute'])
 		controller: 'ConfigureDeviceController',
 		controllerAs: 'configureDeviceCtrl'
 	})
-	.when('/editDevice', {
+	.when('/editDevice/:device_ip', {
 		templateUrl: 'templates/edit-devices.html',
 		controller: 'EditDeviceController',
 		controllerAs: 'editDevicesCtrl'
@@ -50,8 +50,8 @@ app.controller('FindDevicesController', function($scope, $http){
 
 app.controller('ShowDevicesController', function($scope, $http, $route, $routeParams){
 
-	//$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
 	$scope.names = {};
+//	$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
 
 	$http.get('http://localhost:8080/pimask/connected')
 	 .success(function(response){
@@ -153,15 +153,93 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 });
 
-app.controller('EditDeviceController', function($scope, $http){
+app.controller('EditDeviceController', function($scope, $http, $routeParams, $location){
 	
-	/*$http.get('http://localhost:8080/pimask/edit_devices')
-	 .success(function(response){
-	 	$scope.names = response;
-	 })
-	 .error(function(){
-	 	alert("error");
-	 });*/
+	$scope.device = {};
+	//$scope.ip = $routeParams.id;
+
+	$http({
+			method: 'GET',
+			url: 'http://localhost:8080/pimask/edit_device/' + $scope.device_ip
+		})
+		.success(function(data){
+			$scope.device = data;
+
+			$scope.device.brightness = $scope.device.brightness/2.55;
+			$scope.device.contrast = $scope.device.contrast/2.55;
+			$scope.device.saturation = $scope.device.saturation/2.55;
+			$scope.device.video_resolution = String($scope.device.width + "x" + $scope.device.height);
+			$scope.device.preserve_movies = String($scope.device.preserve_movies);
+			$scope.device.video_rotation = String($scope.device.video_rotation);
+			$scope.device.working_schedule = $scope.device.working_schedule.split("|");
+			$scope.device.working_schedule.monday = $scope.device.working_schedule[0];
+			$scope.device.working_schedule.tuesday = $scope.device.working_schedule[1];
+			$scope.device.working_schedule.wednesday = $scope.device.working_schedule[2];
+			$scope.device.working_schedule.thursday = $scope.device.working_schedule[3];
+			$scope.device.working_schedule.friday = $scope.device.working_schedule[4];
+			$scope.device.working_schedule.saturday = $scope.device.working_schedule[5];
+			$scope.device.working_schedule.sunday = $scope.device.working_schedule[6];
+
+			console.log($scope.device);
+		});
+
+
+	$scope.submitForm = function(){
+		var brightnessInfo = parseInt($scope.device.brightness*2.55);
+		var contrastInfo = parseInt($scope.device.contrast*2.55);
+		var saturationInfo = parseInt($scope.device.saturation*2.55);
+		var video_resolutionInfo = $scope.device.video_resolution.split("x");
+		var heightInfo = parseInt(video_resolutionInfo[1]);
+		var widthInfo = parseInt(video_resolutionInfo[0]);
+		var preserve_moviesInfo = parseInt($scope.device.preserve_movies);
+		var video_rotationInfo = parseInt($scope.device.video_rotation);
+
+		var working_scheduleInfo = String($scope.device.working_schedule.monday+"|"+$scope.device.working_schedule.tuesday+"|"
+			+$scope.device.working_schedule.wednesday+"|"+$scope.device.working_schedule.thursday+"|"
+			+$scope.device.working_schedule.friday+"|"+$scope.device.working_schedule.saturday+"|"
+			+$scope.device.working_schedule.sunday);
+		
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $routeParams.id,
+ 		live_streaming: "http://" + $routeParams.id + ":8081",
+ 		brightness: brightnessInfo,
+ 		contrast: contrastInfo ,
+ 		saturation: saturationInfo,
+ 		height: heightInfo,
+ 		width: widthInfo,
+ 		video_rotation: video_rotationInfo,
+ 		frame_rate: $scope.device.frame_rate,
+ 		stream_max_rate: $scope.device.stream_max_rate,
+ 		stream_quality: $scope.device.stream_quality,
+ 		max_movie_time: $scope.device.max_movie_time,
+ 		preserve_movies: preserve_moviesInfo,
+ 		motion_gap: $scope.device.motion_gap,
+ 		pre_capture: $scope.device.pre_capture,
+ 		post_capture: $scope.device.post_capture,
+ 		minimum_motion_frames: $scope.device.minimum_motion_frames,
+ 		working_schedule: working_scheduleInfo
+ 		};
+
+ 		var wirelessInfo = {
+ 			ssid: $scope.device.ssid,
+ 			passwors: $scope.device.password
+ 		};
+
+		$http({
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/edit_device',
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			alert(data.message);
+			$location('/connectedDevices')
+		})
+		.error(function(data){
+			alert(data.message);
+		});
+	};
 });
 
 app.controller('AddUserController', function($scope, $http, $route){
