@@ -94,6 +94,19 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
+	
+//=========================Find Device details===============
+	public static Device findDeviceInDB(UUID devId)
+
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		Device dev = DeviceMapper.get(devId);
+		sess.close();
+		return dev;
+	}
+	
 //=========================Delete Device from server ============================
 	public static void deleteDeviceInDB(UUID devId)
 
@@ -161,7 +174,7 @@ public class Helper {
 		
 //============================pushing the configuration into the device==================
 	public static void executePushConfFile(String host){
-		String command = "sshpass -p \'pass\' scp -r /home/user/desktop/thread-1.conf admin@" +
+		String command = "sshpass -p \'pass\' scp -r ~/thread-1.conf admin@" +
 							host + ":/data/etc" ;
 		System.out.println(command);
 		executeCommand(command);

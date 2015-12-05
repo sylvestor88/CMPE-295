@@ -67,9 +67,25 @@ public class PiController {
 			dev.setDevice_id(id);
 			dev.setNetwork_server(serverIP);
 			dev.setTarget_dir("/data/media/motioneye_" + serverIP.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+			//ConfFileTemplate.createConfigFile(dev);
+			//Helper.executePushConfFile(dev.getDevice_ip());
+			Helper.saveDeviceInDB(dev);
+			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
+			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+		}
+		
+	// update configured device to the database
+		@RequestMapping(value="edit_device/{device_id}", method = RequestMethod.PUT, consumes = "application/json")
+		public @ResponseBody ResponseEntity<Message> editDevice(
+				@PathVariable("device_id") UUID devId, @Valid @RequestBody Device dev)
+		{
+			dev.setDevice_id(devId);
+			dev.setNetwork_server(serverIP);
+			dev.setTarget_dir("/data/media/motioneye_" + serverIP.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
 			ConfFileTemplate.createConfigFile(dev);
 			Helper.executePushConfFile(dev.getDevice_ip());
-			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
+			Helper.saveDeviceInDB(dev);
+			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
 			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 		}
 		
@@ -90,12 +106,21 @@ public class PiController {
 			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);	
 	}
 	
+	// get a device details from the database
+		@RequestMapping(value="findDevice/{device_id}", method = RequestMethod.GET, produces = "application/json")
+		public @ResponseBody ResponseEntity<Device> findDevice(
+				@PathVariable("device_id") UUID devId)
+		{
+			Device dev = Helper.findDeviceInDB(devId);
+			return new ResponseEntity<Device>(dev, HttpStatus.OK);
+		}
+		
 	// delete a device
 	@RequestMapping(value="deleteDevice/{device_id}", method = RequestMethod.DELETE)
 	public @ResponseBody ResponseEntity<Message> deleteDevice(
 			@PathVariable("device_id") UUID devId)
 	{
-		//Helper.deleteDeviceInDB(devId);
+		Helper.deleteDeviceInDB(devId);
 		Message msg = new Message("Device Deleted from the Sever");
 		return new ResponseEntity<Message>(msg, HttpStatus.OK);
 	}

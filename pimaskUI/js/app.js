@@ -15,7 +15,7 @@ var app = angular.module('PiMask',['ngRoute'])
 		controller: 'ConfigureDeviceController',
 		controllerAs: 'configureDeviceCtrl'
 	})
-	.when('/editDevice/:device_ip', {
+	.when('/editDevice/:id', {
 		templateUrl: 'templates/edit-devices.html',
 		controller: 'EditDeviceController',
 		controllerAs: 'editDevicesCtrl'
@@ -66,9 +66,8 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 	 });
 
 	 $scope.deleteDevice = function(name){
-
-	 	var x;
 		
+		console.log(name);
 		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
 			var URL = 'http://localhost:8080/pimask/deleteDevice/' + name.device_id;	
 			$http({
@@ -133,7 +132,7 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
  		var wirelessInfo = {
  			ssid: $scope.device.ssid,
- 			passwors: $scope.device.password
+ 			password: $scope.device.password
  		};
 
 		$http({
@@ -156,11 +155,11 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 app.controller('EditDeviceController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device = {};
-	//$scope.ip = $routeParams.id;
+	$scope.uuid = $routeParams.id;
 
 	$http({
 			method: 'GET',
-			url: 'http://localhost:8080/pimask/edit_device/' + $scope.device_ip
+			url: 'http://localhost:8080/pimask/findDevice/' + $scope.uuid
 		})
 		.success(function(data){
 			$scope.device = data;
@@ -201,7 +200,7 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 		
 		var deviceInfo = {
  		name: $scope.device.name,
- 		device_ip: $routeParams.id,
+ 		device_ip: $scope.device.device_ip,
  		live_streaming: "http://" + $routeParams.id + ":8081",
  		brightness: brightnessInfo,
  		contrast: contrastInfo ,
@@ -223,12 +222,12 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 
  		var wirelessInfo = {
  			ssid: $scope.device.ssid,
- 			passwors: $scope.device.password
+ 			password: $scope.device.password
  		};
 
 		$http({
-			method: 'POST',
-			url: 'http://localhost:8080/pimask/edit_device',
+			method: 'PUT',
+			url: 'http://localhost:8080/pimask/edit_device/' + $scope.uuid,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})

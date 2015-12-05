@@ -76,7 +76,7 @@ public class ConfFileTemplate {
 	 
 //=============End of the string build && begin of the Writing file ===============
 	
-	return writeConffile(conf_string, "/home/sylvestor/thread-1.conf");
+	return writeConffile(conf_string, "~/thread-1.conf");
 	 
 	}
 	
