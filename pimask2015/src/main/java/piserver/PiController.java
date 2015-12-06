@@ -32,23 +32,13 @@ import beans.User;
 public class PiController {
 	
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
-	String serverIP;
 	
 	// finds devices on the same network as the Pi Server
 	@RequestMapping(value = "find_devices", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> listDevices() {
 
-		String currentIp = null;
-		String output = Helper.executeGetInet("ifconfig eth0");
-		String[] ip = output.split(" ");
-		
-		for (int i = 0; i < ip.length; i++) {
-			if (ip[i].contains("addr"))
-				currentIp = ip[i].substring(ip[i].lastIndexOf(":") + 1);
-		}
-
+		String currentIp = Helper.executeGetInet("ifconfig eth0");
 		String subnet = Helper.getSubnet(currentIp);
-		serverIP = currentIp;
 		ArrayList<NetworkDevice> deviceList = Helper.executeGetDevices("nmap -sP " + subnet + "1-255", currentIp);
 		
 		if(!deviceList.isEmpty())
@@ -63,11 +53,10 @@ public class PiController {
 		@RequestMapping(value="save_device", method = RequestMethod.POST, consumes = "application/json")
 		public @ResponseBody ResponseEntity<Message> saveDevice(@Valid @RequestBody Device dev)
 		{
-			UUID id = UUIDs.random();
-			dev.setDevice_id(id);
-			dev.setNetwork_server(serverIP);
-			dev.setTarget_dir("/data/media/motioneye_" + serverIP.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
-			//ConfFileTemplate.createConfigFile(dev);
+			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+			String serverIp = Helper.executeGetInet("ifconfig eth0");
+			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+			ConfFileTemplate.createConfigFile(dev);
 			//Helper.executePushConfFile(dev.getDevice_ip());
 			Helper.saveDeviceInDB(dev);
 			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
@@ -75,15 +64,15 @@ public class PiController {
 		}
 		
 	// update configured device to the database
-		@RequestMapping(value="edit_device/{device_id}", method = RequestMethod.PUT, consumes = "application/json")
+		@RequestMapping(value="edit_device/{id:.+}", method = RequestMethod.POST, consumes = "application/json")
 		public @ResponseBody ResponseEntity<Message> editDevice(
-				@PathVariable("device_id") UUID devId, @Valid @RequestBody Device dev)
+				@PathVariable("id") String devId, @Valid @RequestBody Device dev)
 		{
-			dev.setDevice_id(devId);
-			dev.setNetwork_server(serverIP);
-			dev.setTarget_dir("/data/media/motioneye_" + serverIP.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+			String serverIp = Helper.executeGetInet("ifconfig eth0");
+			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
 			ConfFileTemplate.createConfigFile(dev);
-			Helper.executePushConfFile(dev.getDevice_ip());
+			//Helper.executePushConfFile(dev.getDevice_ip());
 			Helper.saveDeviceInDB(dev);
 			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
 			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
@@ -107,18 +96,18 @@ public class PiController {
 	}
 	
 	// get a device details from the database
-		@RequestMapping(value="findDevice/{device_id}", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value="findDevice/{id:.+}", method = RequestMethod.GET, produces = "application/json")
 		public @ResponseBody ResponseEntity<Device> findDevice(
-				@PathVariable("device_id") UUID devId)
+				@PathVariable("id") String devId)
 		{
 			Device dev = Helper.findDeviceInDB(devId);
 			return new ResponseEntity<Device>(dev, HttpStatus.OK);
 		}
 		
 	// delete a device
-	@RequestMapping(value="deleteDevice/{device_id}", method = RequestMethod.DELETE)
+	@RequestMapping(value="deleteDevice/{id:.+}", method = RequestMethod.DELETE)
 	public @ResponseBody ResponseEntity<Message> deleteDevice(
-			@PathVariable("device_id") UUID devId)
+			@PathVariable("id") String devId)
 	{
 		Helper.deleteDeviceInDB(devId);
 		Message msg = new Message("Device Deleted from the Sever");

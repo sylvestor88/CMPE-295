@@ -33,7 +33,13 @@ public class Helper {
 			while ((line = reader.readLine()) != null) 
 			{
 				if(line.indexOf("inet addr") != -1)
-					return line;
+				{
+					String[] ip = line.split(" ");
+					for (int i = 0; i < ip.length; i++) {
+						if (ip[i].contains("addr"))
+							return ip[i].substring(ip[i].lastIndexOf(":") + 1);
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -96,7 +102,7 @@ public class Helper {
 	}
 	
 //=========================Find Device details===============
-	public static Device findDeviceInDB(UUID devId)
+	public static Device findDeviceInDB(String devId)
 
 	{
 		CassandraDB db = new CassandraDB();
@@ -108,7 +114,7 @@ public class Helper {
 	}
 	
 //=========================Delete Device from server ============================
-	public static void deleteDeviceInDB(UUID devId)
+	public static void deleteDeviceInDB(String devId)
 
 	{
 		CassandraDB db = new CassandraDB();

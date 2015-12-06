@@ -37,39 +37,41 @@ var app = angular.module('PiMask',['ngRoute'])
 
 app.controller('FindDevicesController', function($scope, $http){
 	
-	//$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
-	
+	$scope.names = {};
+
 	$http.get('http://localhost:8080/pimask/find_devices')
 	 .success(function(response){
 	 	$scope.names = response;
+	 	if(response.length == 0)
+	 	{
+	 		alert("No Devices Found on the network.");
+	 	}
 	 })
 	 .error(function(){
-	 	alert("Unable to find any devices");
+	 	alert("No Devices Found. Please try again!");
 	 });
 });
 
 app.controller('ShowDevicesController', function($scope, $http, $route, $routeParams){
 
 	$scope.names = {};
-//	$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
-
+	
 	$http.get('http://localhost:8080/pimask/connected')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
 	 	{
-	 		alert("No devices conncted to the server.");
+	 		alert("No devices connected to the server.");
 	 	}
 	 })
 	 .error(function(response){
-	 	alert("error");
+	 	alert("Something went wrong. Please try again!")
 	 });
 
 	 $scope.deleteDevice = function(name){
 		
-		console.log(name);
 		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
-			var URL = 'http://localhost:8080/pimask/deleteDevice/' + name.device_id;	
+			var URL = 'http://localhost:8080/pimask/deleteDevice/' + String(name.device_ip);	
 			$http({
 				method: 'DELETE',
 				url: URL
@@ -82,7 +84,6 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 				alert(data.message);
 			});
 		} else{
-
 			$route.reload();
 		}
 	 };
@@ -117,6 +118,7 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
  		saturation: saturationInfo,
  		height: heightInfo,
  		width: widthInfo,
+ 		text_left: $scope.device.name,
  		video_rotation: video_rotationInfo,
  		frame_rate: $scope.device.frame_rate,
  		stream_max_rate: $scope.device.stream_max_rate,
@@ -148,6 +150,8 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 		.error(function(data){
 			alert(data.message);
 		});
+
+		$scope.device={};
 	};
 
 });
@@ -155,11 +159,11 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 app.controller('EditDeviceController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device = {};
-	$scope.uuid = $routeParams.id;
+	$scope.ip = $routeParams.id;
 
 	$http({
 			method: 'GET',
-			url: 'http://localhost:8080/pimask/findDevice/' + $scope.uuid
+			url: 'http://localhost:8080/pimask/findDevice/' + $scope.ip
 		})
 		.success(function(data){
 			$scope.device = data;
@@ -200,13 +204,14 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 		
 		var deviceInfo = {
  		name: $scope.device.name,
- 		device_ip: $scope.device.device_ip,
- 		live_streaming: "http://" + $routeParams.id + ":8081",
+ 		device_ip: $scope.ip,
+ 		live_streaming: "http://" + $scope.ip + ":8081",
  		brightness: brightnessInfo,
  		contrast: contrastInfo ,
  		saturation: saturationInfo,
  		height: heightInfo,
  		width: widthInfo,
+ 		text_left: $scope.device.name,
  		video_rotation: video_rotationInfo,
  		frame_rate: $scope.device.frame_rate,
  		stream_max_rate: $scope.device.stream_max_rate,
@@ -225,9 +230,10 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
  			password: $scope.device.password
  		};
 
+ 		console.log(deviceInfo);
 		$http({
-			method: 'PUT',
-			url: 'http://localhost:8080/pimask/edit_device/' + $scope.uuid,
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/edit_device/' + $scope.ip,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
@@ -263,11 +269,11 @@ app.controller('AddUserController', function($scope, $http, $route){
 			data: $scope.newUser
 		})
 		.success(function(data){
-			alert(data.message);
+			swal(data.message, "", "success");
 			$route.reload();
 		})
 		.error(function(data){
-			alert(data.message);
+			swal(data.message, "", "error");
 		});
 
 		$scope.newUser = {};
@@ -285,11 +291,11 @@ app.controller('AddUserController', function($scope, $http, $route){
 				url: URL
 			})
 			.success(function(data){
-				alert(data.message);
+				swal(data.message, "", "success");
 				$route.reload();
 			})
 			.error(function(data){
-				alert(data.message);
+				swal(data.message, "", "error");
 			});
 		} else {
 
@@ -331,11 +337,11 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 			data: $scope.user
 		})
 		.success(function(data){
-			alert(data.message);
+			swal(data.message, "", "success");
 			$location.path('/addUser');
 		})
 		.error(function(data){
-			alert(data.message);
+			swal(data.message, "", "error");
 		});
 	};
 });
