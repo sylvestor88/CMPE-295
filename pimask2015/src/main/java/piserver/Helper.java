@@ -180,7 +180,7 @@ public class Helper {
 		
 //============================pushing the configuration into the device==================
 	public static void executePushConfFile(String host){
-		String command = "sshpass -p \'pass\' scp -r ~/thread-1.conf admin@" +
+		String command = "sshpass -p 'pass' scp -r /home/pi/conf_files/thread-1.conf admin@" +
 							host + ":/data/etc" ;
 		System.out.println(command);
 		executeCommand(command);
@@ -189,7 +189,7 @@ public class Helper {
 	}
 //======================Restart the camera=========================
 	public static void restart(String host){
-		String command = "sshpass -p \'pass\' ssh admin@"+ host + " reboot";
+		String command = "sshpass -p 'pass' ssh admin@"+ host + " reboot";
 		System.out.println(command);
 		executeCommand(command);
 		
@@ -198,7 +198,7 @@ public class Helper {
 	static void executeCommand(String COMMAND){
 
 		String[] SHELL_COMMAND = {"/bin/sh","-c",COMMAND};
-			String line = "";
+			//String line = "";
 			Process p;
 			try {
 				p = Runtime.getRuntime().exec(SHELL_COMMAND);
