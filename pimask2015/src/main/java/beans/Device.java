@@ -1,7 +1,5 @@
 package beans;
 
-import java.util.UUID;
-
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
@@ -9,8 +7,8 @@ import com.datastax.driver.mapping.annotations.Table;
 public class Device {
 	
 	@PartitionKey
-	private UUID device_id;
 	private String device_ip;
+	
 	private boolean notification = true;
 	private String data_location;
 	private String live_streaming;
@@ -20,14 +18,14 @@ public class Device {
 	private int webcam_resolution = 100;
 	private String enabled ="on";
 	private String name ="Camera1";
-	private String network_share_name = "pimaskoutput";
+	private String network_share_name = "pimask_data";
 	private String network_server;
 	private String motion_detection ="on";
 	private int preserve_pictures = 0;
 	private String storage_device ="network-share";
 	private int preserve_movies = 1;
 	private String network_username = "pi" ;
-	private String network_password = "pimask";
+	private String network_password = "pimask2015";
 	private int id = 1;
 	private String working_schedule ;
 	private String webcam_server_resize ="off";
@@ -55,7 +53,7 @@ public class Device {
 	private String picture_filename ="%Y-%m-%d/%H-%M-%S";
 	private String locate_motion_style ="redbox";
 	private String locate_motion_mode ="off";
-	private int contrast = 0;
+	private int contrast = 25;
 	private int stream_maxrate = 5;
 	private String output_pictures ="off";
 	private int hue = 0;
@@ -73,7 +71,7 @@ public class Device {
 	private String text_right ="%Y-%m-%d\\n%T";
 	private String on_event_start ="/usr/bin/python /usr/lib/python2.7/site-packages/motioneye/meyectl.pyc relayevent -c /data/etc/motioneye.conf -l start %t";
 	private int ffmpeg_bps = 44544;
-	private int brightness = 0;
+	private int brightness = 25;
 	private int framerate = 2;
 	private int max_movie_time = 30;
 	private String emulate_motion ="off";
@@ -81,12 +79,6 @@ public class Device {
 	private int minimum_motion_frames = 10;
 	
 	// getter and setter methods for the configurable variables.
-	public UUID getDevice_id() {
-		return device_id;
-	}
-	public void setDevice_id(UUID device_id) {
-		this.device_id = device_id;
-	}
 	public String getDevice_ip() {
 		return device_ip;
 	}

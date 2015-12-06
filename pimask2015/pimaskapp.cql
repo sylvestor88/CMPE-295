@@ -1,9 +1,8 @@
 CREATE	keyspace IF NOT EXISTS pimaskapp with replication = { 'class': 'SimpleStrategy', 'replication_factor': 3};
 
 CREATE TABLE IF NOT EXISTS pimaskapp.connected_devices (
-	device_id UUID PRIMARY KEY,
+	device_ip text PRIMARY KEY,
 	name text,
-	device_ip text,
 	notification boolean,
 	data_location text,
 	live_streaming text,

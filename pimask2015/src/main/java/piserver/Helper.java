@@ -33,7 +33,13 @@ public class Helper {
 			while ((line = reader.readLine()) != null) 
 			{
 				if(line.indexOf("inet addr") != -1)
-					return line;
+				{
+					String[] ip = line.split(" ");
+					for (int i = 0; i < ip.length; i++) {
+						if (ip[i].contains("addr"))
+							return ip[i].substring(ip[i].lastIndexOf(":") + 1);
+					}
+				}
 			}
 
 		} catch (Exception e) {
@@ -94,8 +100,21 @@ public class Helper {
 		DeviceMapper.save(dev);
 		sess.close();
 	}
+	
+//=========================Find Device details===============
+	public static Device findDeviceInDB(String devId)
+
+	{
+		CassandraDB db = new CassandraDB();
+		Session sess = db.connect();
+		Mapper<Device> DeviceMapper = new MappingManager(sess).mapper(Device.class);
+		Device dev = DeviceMapper.get(devId);
+		sess.close();
+		return dev;
+	}
+	
 //=========================Delete Device from server ============================
-	public static void deleteDeviceInDB(UUID devId)
+	public static void deleteDeviceInDB(String devId)
 
 	{
 		CassandraDB db = new CassandraDB();
@@ -161,7 +180,7 @@ public class Helper {
 		
 //============================pushing the configuration into the device==================
 	public static void executePushConfFile(String host){
-		String command = "sshpass -p \'pass\' scp -r /home/user/desktop/thread-1.conf admin@" +
+		String command = "sshpass -p 'pass' scp -r /home/pi/conf_files/thread-1.conf admin@" +
 							host + ":/data/etc" ;
 		System.out.println(command);
 		executeCommand(command);
@@ -170,7 +189,7 @@ public class Helper {
 	}
 //======================Restart the camera=========================
 	public static void restart(String host){
-		String command = "sshpass -p \'pass\' ssh admin@"+ host + " reboot";
+		String command = "sshpass -p 'pass' ssh admin@"+ host + " reboot";
 		System.out.println(command);
 		executeCommand(command);
 		
@@ -179,7 +198,7 @@ public class Helper {
 	static void executeCommand(String COMMAND){
 
 		String[] SHELL_COMMAND = {"/bin/sh","-c",COMMAND};
-			String line = "";
+			//String line = "";
 			Process p;
 			try {
 				p = Runtime.getRuntime().exec(SHELL_COMMAND);
