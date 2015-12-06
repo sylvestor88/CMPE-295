@@ -161,7 +161,7 @@ public class PiController {
 			@RequestBody User user, @PathVariable("user_id") UUID userId)
 	{
 		Helper.saveUserInDB(user);;
-		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " updateds.");
+		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " updated.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 	}
 	

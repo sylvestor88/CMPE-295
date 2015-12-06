@@ -269,19 +269,17 @@ app.controller('AddUserController', function($scope, $http, $route){
 			data: $scope.newUser
 		})
 		.success(function(data){
-			swal(data.message, "", "success");
+			alert(data.message);
 			$route.reload();
 		})
 		.error(function(data){
-			swal(data.message, "", "error");
+			alert(data.message);
 		});
 
 		$scope.newUser = {};
 	}
 
 	$scope.deleteUser = function(user){
-
-		var x;
 		
 		if(confirm("User " + user.email + " will be deleted. Are you sure?") == true){
 
@@ -291,11 +289,11 @@ app.controller('AddUserController', function($scope, $http, $route){
 				url: URL
 			})
 			.success(function(data){
-				swal(data.message, "", "success");
+				alert(data.message);
 				$route.reload();
 			})
 			.error(function(data){
-				swal(data.message, "", "error");
+				alert(data.message);
 			});
 		} else {
 
@@ -337,11 +335,11 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 			data: $scope.user
 		})
 		.success(function(data){
-			swal(data.message, "", "success");
+			alert(data.message);
 			$location.path('/addUser');
 		})
 		.error(function(data){
-			swal(data.message, "", "error");
+			alert(data.message);
 		});
 	};
 });

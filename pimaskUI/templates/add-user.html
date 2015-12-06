@@ -32,6 +32,7 @@
             <tr ng-repeat='user in users'>
               <td>{{ user.email }}</td>
               <td>{{ user.first_name }}  {{ user.last_name }}</td>
+              <td>{{ user.notification }}</td>
               <td><a href="#/editUser/{{user.user_id}}" class="btn btn-xs btn-primary" data-target="editUser">Edit</a>&nbsp;&nbsp;<a ng-click="deleteUser(user)" class="btn btn-xs btn-primary">Delete</a></td>
             </tr>
           </tbody>
