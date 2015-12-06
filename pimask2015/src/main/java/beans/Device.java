@@ -18,7 +18,7 @@ public class Device {
 	private int webcam_resolution = 100;
 	private String enabled ="on";
 	private String name ="Camera1";
-	private String network_share_name = "pimask_data";
+	private String network_share_name = "pimask_videos";
 	private String network_server;
 	private String motion_detection ="on";
 	private int preserve_pictures = 0;
