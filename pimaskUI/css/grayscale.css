@@ -22,22 +22,68 @@
 
 #findDevices {
     margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
 }
 
 #connectedDevices {
     margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
 }
 
 #configureDevices {
     margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 90%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-bottom: 20px;
 }
 
 #editDevices {
     margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 90%;
+    opacity: 50%;
+    color: #d9d9d9;
+    font-size: 15px;
+    padding-bottom: 20px;
 }
 
-.userForm{
+#addUser {
     margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
+}
+
+#currentUsers{
+    margin-top: 10px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
 }
 
 .ng-invalid.ng-dirty {
@@ -47,3 +93,4 @@
 .ng-valid.ng-dirty {
     border-color: #78FA89;
 }
+
