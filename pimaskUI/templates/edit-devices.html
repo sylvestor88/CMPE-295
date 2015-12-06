@@ -1,12 +1,12 @@
-<section id="editDevices" class="container content-section">
-  <p> Edit the Configuration for a device</p>
+<section  id="editDevices" class="container content-section">
+  <p style="margin-top:20px; font-type:bold; font-size:20px"> Edit Configuration for {{device.devcie_name}}</p>
   <form name="deviceForm" ng-submit="deviceForm.$valid && submitForm(device)" novalidate>
 
 
   <!------------------------------------------------- Video Device Details -------------------------------------------------------->
   
   <details>
-  <summary>Video Device</summary>
+  <summary class="btn btn-large" style="font-type:bold; font-size: 18px">Video Device</summary>
   <fieldset class="form-group">
     <label for="name">Device Name</label>
     <input ng-model="device.name" type="text" class="form-control" id="name" placeholder="Camera 1">
@@ -67,7 +67,7 @@
   <!------------------------------------------------- Wireless Network Details -------------------------------------------------------->
 
   <details>
-  <summary>Wireless Network</summary>
+  <summary class="btn"  style="font-type:bold; font-size: 18px">Wireless Network</summary>
 
   <label for="wireless_network">Wireless Network</label>
   <div class="radio">
@@ -98,7 +98,7 @@
  <!------------------------------------------------- Video Streaming Details -------------------------------------------------------->
 
 <details>
-  <summary>Video Streaming Settings</summary>
+  <summary class="btn"  style="font-type:bold; font-size: 18px">Video Streaming Settings</summary>
  <fieldset class="form-group">
     <label for="stream_max_rate">Stream Frame Rate</label>
     <input ng-model="device.stream_max_rate" type="number" class="form-control" id="stream_max_rate" placeholder="1-30">
@@ -114,7 +114,7 @@
  <!------------------------------------------------- Movies Details -------------------------------------------------------->
 
   <details>
-  <summary>Movies Settings</summary>
+  <summary class="btn" style="font-type:bold; font-size: 18px">Movies Settings</summary>
 
   <fieldset class="form-group">
     <label for="max_movie_time">Maximum Movie Time (in seconds)</label>
@@ -134,7 +134,7 @@
 <!------------------------------------------------- Motion Detection Details -------------------------------------------------------->
 
  <details>
-  <summary>Motion Detection Settings</summary>
+  <summary class="btn" style="font-type:bold; font-size: 18px">Motion Detection Settings</summary>
   
   <fieldset class="form-group">
     <label for="motion_gap">Motion Gap (in seconds)</label>
@@ -157,8 +157,10 @@
   </fieldset>
 </details>
 
+<!------------------------------------------------- Camera Setting Details -------------------------------------------------------->
+
  <details>
-  <summary>Camera Setting</summary>
+  <summary class="btn" style="font-type:bold; font-size: 18px">Camera Setting</summary>
   <label>Workday Schedule</label>
   <div class="checkbox">
   <label>
