@@ -36,10 +36,8 @@ var app = angular.module('PiMask',['ngRoute'])
 });
 
 app.controller('FindDevicesController', function($scope, $http){
-
-	//$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
-
 	$scope.names = {};
+	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
 
 	$http.get('http://localhost:8080/pimask/find_devices')
 	 .success(function(response){
@@ -58,7 +56,7 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 
 	$scope.names = {};
 
-	//$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
+	$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
 	$http.get('http://localhost:8080/pimask/connected')
 	 .success(function(response){
 	 	$scope.names = response;
@@ -132,7 +130,8 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
  		pre_capture: $scope.device.pre_capture,
  		post_capture: $scope.device.post_capture,
  		minimum_motion_frames: $scope.device.minimum_motion_frames,
- 		working_schedule: working_scheduleInfo
+ 		working_schedule: working_scheduleInfo,
+ 		notification: notification
  		};
 
  		var wirelessInfo = {
@@ -225,7 +224,8 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
  		pre_capture: $scope.device.pre_capture,
  		post_capture: $scope.device.post_capture,
  		minimum_motion_frames: $scope.device.minimum_motion_frames,
- 		working_schedule: working_scheduleInfo
+ 		working_schedule: working_scheduleInfo,
+ 		notification: notification
  		};
 
  		var wirelessInfo = {

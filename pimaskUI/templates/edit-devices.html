@@ -35,7 +35,7 @@
   </fieldset>
 
   <label for="video_resolution">Video Resolution</label>
-      <select class = "form-control" ng-model="device.video_resolution">
+      <select class = "form-control" type="text" ng-model="device.video_resolution">
         <option type="text" value="320x240">320x240</option>
         <option type="text" value="640x480">640x480</option>
         <option type="text" value="800x480">800x480</option>
@@ -204,6 +204,14 @@
     Sunday
   </label>
 </div>
+
+<fieldset class="form-group">
+    <label for="notification">Receive Notification?</label>
+    <select class="form-control" id="notification" ng-model="newUser.notification" required>
+      <option value='true'>Yes</option>
+      <option value='false'>No</option>
+    </select>
+  </fieldset>
 </details>
 
 <br>
