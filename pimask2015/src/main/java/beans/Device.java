@@ -14,7 +14,7 @@ public class Device {
 	private String live_streaming;
 
 	//===============begin of the conf variables =================================
-	private String working_schedule_type = "outside";
+	private String working_schedule_type = "during";
 	private int webcam_resolution = 100;
 	private String enabled ="on";
 	private String name ="Camera1";
@@ -32,10 +32,10 @@ public class Device {
 	
 	//configuration details which needs to be obtained from the user
 	private int lightswitch = 0;
-	private String stream_authenticationuser =":pass";
+	private String stream_authenticationuser ="pass";
 	private int snapshot_interval = 0;
 	private String ffmpeg_output_movies ="on";
-	private String stream_motion ="off";
+	private String stream_motion ="on";
 	private String target_dir = null;
 	private String text_double ="off";
 	private int height = 240;

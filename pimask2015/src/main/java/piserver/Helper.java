@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -76,13 +77,12 @@ public class Helper {
 						deviceList.add(newDevice);
 					}
 				}	
-				p.destroy();
 			}
-
+			reader.close();
+			p.destroy();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return deviceList;
 	}
 //========================get subnet mask of the network ========================
@@ -182,7 +182,6 @@ public class Helper {
 	public static void executePushConfFile(String host){
 		String command = "sshpass -p 'pass' scp -r /home/pi/conf_files/thread-1.conf admin@" +
 							host + ":/data/etc" ;
-		System.out.println(command);
 		executeCommand(command);
 		restart(host);
 		
@@ -190,7 +189,6 @@ public class Helper {
 //======================Restart the camera=========================
 	public static void restart(String host){
 		String command = "sshpass -p 'pass' ssh admin@"+ host + " reboot";
-		System.out.println(command);
 		executeCommand(command);
 		
 	}
@@ -203,8 +201,8 @@ public class Helper {
 			try {
 				p = Runtime.getRuntime().exec(SHELL_COMMAND);
 				p.waitFor();
-				System.out.print(loadStream(p.getInputStream()));
-	            System.err.print(loadStream(p.getErrorStream()));
+				//System.out.print(loadStream(p.getInputStream()));
+	            //System.err.print(loadStream(p.getErrorStream()));
 	        
 					p.destroy();
 				}
