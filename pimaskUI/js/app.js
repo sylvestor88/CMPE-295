@@ -41,7 +41,7 @@ app.controller('FindDevicesController', function($scope, $http){
 
 	$scope.names = {};
 
-	$http.get('http://localhost:8080/pimask/find_devices')
+	$http.get('http://192.168.1.105:8080/pimask/find_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
@@ -59,7 +59,7 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 	$scope.names = {};
 
 	//$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
-	$http.get('http://localhost:8080/pimask/connected')
+	$http.get('http://192.168.1.105:8080/pimask/connected')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
@@ -74,7 +74,7 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 	 $scope.deleteDevice = function(name){
 		
 		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
-			var URL = 'http://localhost:8080/pimask/deleteDevice/' + String(name.device_ip);	
+			var URL = 'http://192.168.1.105:8080/pimask/deleteDevice/' + String(name.device_ip);	
 			$http({
 				method: 'DELETE',
 				url: URL
@@ -142,7 +142,7 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 		$http({
 			method: 'POST',
-			url: 'http://localhost:8080/pimask/save_device',
+			url: 'http://192.168.1.105:8080/pimask/save_device',
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
@@ -166,7 +166,7 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 
 	$http({
 			method: 'GET',
-			url: 'http://localhost:8080/pimask/findDevice/' + $scope.ip
+			url: 'http://192.168.1.105:8080/pimask/findDevice/' + $scope.ip
 		})
 		.success(function(data){
 			$scope.device = data;
@@ -236,7 +236,7 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
  		console.log(deviceInfo);
 		$http({
 			method: 'POST',
-			url: 'http://localhost:8080/pimask/edit_device/' + $scope.ip,
+			url: 'http://192.168.1.105:8080/pimask/edit_device/' + $scope.ip,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
@@ -256,7 +256,7 @@ app.controller('AddUserController', function($scope, $http, $route){
 
 	$http({
 			method: 'GET',
-			url: 'http://localhost:8080/pimask/users'
+			url: 'http://192.168.1.105:8080/pimask/users'
 		})
 		.success(function(data){
 			$scope.users = data;
@@ -267,7 +267,7 @@ app.controller('AddUserController', function($scope, $http, $route){
 		console.log($scope.newUser);
 		$http({
 			method: 'POST',
-			url: 'http://localhost:8080/pimask/save_user',
+			url: 'http://192.168.1.105:8080/pimask/save_user',
 			headers: {'Content-Type': 'application/json'},
 			data: $scope.newUser
 		})
@@ -286,7 +286,7 @@ app.controller('AddUserController', function($scope, $http, $route){
 		
 		if(confirm("User " + user.email + " will be deleted. Are you sure?") == true){
 
-			var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+			var URL = 'http://192.168.1.105:8080/pimask/delete_user/' + user.user_id;	
 			$http({
 				method: 'DELETE',
 				url: URL
@@ -313,7 +313,7 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 
 	$http({
 			method: 'GET',
-			url: 'http://localhost:8080/pimask/users/' + $scope.id
+			url: 'http://192.168.1.105:8080/pimask/users/' + $scope.id
 		})
 		.success(function(data){
 			$scope.user = data;
@@ -333,7 +333,7 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 		//console.log($scope.user);
 		$http({
 			method: 'PUT',
-			url: 'http://localhost:8080/pimask/edit_user/' + $scope.user.user_id,
+			url: 'http://192.168.1.105:8080/pimask/edit_user/' + $scope.user.user_id,
 			headers: {'Content-Type': 'application/json'},
 			data: $scope.user
 		})

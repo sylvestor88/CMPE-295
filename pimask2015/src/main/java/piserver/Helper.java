@@ -182,14 +182,16 @@ public class Helper {
 	public static void executePushConfFile(String host){
 		String command = "sshpass -p 'pass' scp -r /home/pi/conf_files/thread-1.conf admin@" +
 							host + ":/data/etc" ;
-		executeCommand(command);
+System.out.println(command);		
+executeCommand(command);
 		restart(host);
 		
 	}
 //======================Restart the camera=========================
 	public static void restart(String host){
 		String command = "sshpass -p 'pass' ssh admin@"+ host + " reboot";
-		executeCommand(command);
+System.out.println(command);		
+executeCommand(command);
 		
 	}
 //=======================command executer ===============================
@@ -201,8 +203,8 @@ public class Helper {
 			try {
 				p = Runtime.getRuntime().exec(SHELL_COMMAND);
 				p.waitFor();
-				//System.out.print(loadStream(p.getInputStream()));
-	            //System.err.print(loadStream(p.getErrorStream()));
+				System.out.print(loadStream(p.getInputStream()));
+	            System.err.print(loadStream(p.getErrorStream()));
 	        
 					p.destroy();
 				}
