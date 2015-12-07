@@ -28,7 +28,7 @@ public class ConfFileTemplate {
 
 
 			"lightswitch "+a.getLightswitch()+"\n"+
-			"stream_authentication user :"+a.getStream_authenticationuser()+"\n"+
+			"stream_authentication user:"+a.getStream_authenticationuser()+"\n"+
 			"snapshot_interval "+a.getSnapshot_interval()+"\n"+
 			"ffmpeg_output_movies "+a.getFfmpeg_output_movies()+"\n"+
 			"stream_motion "+a.getStream_motion()+"\n"+

@@ -55,6 +55,7 @@ public class PiController {
 		{
 			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
 			String serverIp = Helper.executeGetInet("ifconfig eth0");
+			dev.setNetwork_server(serverIp);
 			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
 			ConfFileTemplate.createConfigFile(dev);
 			Helper.executePushConfFile(dev.getDevice_ip());
@@ -70,6 +71,7 @@ public class PiController {
 		{
 			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
 			String serverIp = Helper.executeGetInet("ifconfig eth0");
+			dev.setNetwork_server(serverIp);
 			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
 			ConfFileTemplate.createConfigFile(dev);
 			Helper.executePushConfFile(dev.getDevice_ip());
