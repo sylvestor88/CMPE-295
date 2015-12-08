@@ -46,11 +46,13 @@ app.controller('FindDevicesController', function($scope, $http){
 	 	$scope.names = response;
 	 	if(response.length == 0)
 	 	{
-	 		alert("No Devices Found on the network.");
+	 		//alert("No Devices Found on the network.");
+	 		swal({   title: "Sorry!",   text: "No Devices Found on the network. Check your internet connection.",   type: "error",   confirmButtonText: "OK" });
 	 	}
 	 })
 	 .error(function(){
-	 	alert("No Devices Found. Please try again!");
+	 	//alert("No Devices Found. Please try again!");
+	 	swal({   title: "Sorry!",   text: "No Devices Found on the network. Check your internet connection.",   type: "error",   confirmButtonText: "OK" });
 	 });
 });
 
@@ -58,38 +60,50 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 
 	$scope.names = {};
 
-	//$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
+	$scope.names = [{"device_ip": "192.168.100.23", "name": "PiCamera"}, {"device_ip": "192.168.100.27", "name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
 	$http.get('http://192.168.1.105:8080/pimask/connected')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
 	 	{
-	 		alert("No devices connected to the server.");
+	 		//alert("No devices connected to the server.");
+	 		swal({   title: "Sorry!",   text: "No devices are currently connected to the server.",   type: "error",   confirmButtonText: "OK" });
 	 	}
 	 })
 	 .error(function(response){
-	 	alert("Something went wrong. Please try again!")
+	 	//alert("Something went wrong. Please try again!");
+	 	swal({   title: "Error!",   text: "Something went wrong. Please try again!",   type: "error",   confirmButtonText: "OK" });
+
 	 });
 
 	 $scope.deleteDevice = function(name){
-		
-		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
-			var URL = 'http://192.168.1.105:8080/pimask/deleteDevice/' + String(name.device_ip);	
-			$http({
-				method: 'DELETE',
-				url: URL
-			})
+	 		swal({	title: "Are you sure?",
+	 				text: "Device " + name.name + " and all its files will be deleted permanently. Are you sure?",
+	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
+	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
+	 			function(){ 
+	 				var URL = 'http://192.168.1.105:8080/pimask/deleteDevice/' + String(name.device_ip);	
+					$http({
+						method: 'DELETE',
+						url: URL
+					})  
+					//swal("Deleted!", "Your imaginary file has been deleted.", "success"); });
+	
+		//	if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
+			
 			.success(function(data){
-				alert(data.message);
+				//alert(data.message);
+				swal("Deleted!", data.message, "success"); });
 				$route.reload();
 			})
 			.error(function(data){
-				alert(data.message);
+				//alert(data.message);
+				swal("Oops!", data.message, "error"); 
 			});
-		} else{
-			$route.reload();
-		}
-	 };
+		}; //else{
+			//$route.reload();
+	//	}
+	 //};
 });
 
 app.controller('ConfigureDeviceController', function($scope, $http, $routeParams, $location){
@@ -147,11 +161,13 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "Device Saved!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
 			$location('/connectedDevices')
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error"); 
 		});
 
 		$scope.device={};
@@ -241,11 +257,13 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "Device Updated!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
 			$location('/connectedDevices')
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 	};
 });
@@ -272,18 +290,44 @@ app.controller('AddUserController', function($scope, $http, $route){
 			data: $scope.newUser
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "User Created!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
 			$route.reload();
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 
 		$scope.newUser = {};
 	}
 
 	$scope.deleteUser = function(user){
-		
+	
+		swal({	title: "Are you sure?",
+	 				text: "Device " + name.name + " and all its files will be deleted permanently. Are you sure?",
+	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
+	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
+	 			function(){ 
+	 				var URL = 'http://192.168.1.105:8080/pimask/delete_user/' + user.user_id;	
+					$http({
+						method: 'DELETE',
+						url: URL
+					})
+					
+				.success(function(data){
+					//alert(data.message);
+					swal("Deleted!", data.message, "success"); });
+					$route.reload();
+				})
+				.error(function(data){
+					//alert(data.message);
+					swal("Oops!", data.message, "error"); 
+				});
+			};
+
+
+/*
 		if(confirm("User " + user.email + " will be deleted. Are you sure?") == true){
 
 			var URL = 'http://192.168.1.105:8080/pimask/delete_user/' + user.user_id;	
@@ -296,13 +340,14 @@ app.controller('AddUserController', function($scope, $http, $route){
 				$route.reload();
 			})
 			.error(function(data){
-				alert(data.message);
+				//alert(data.message);
+				swal("Oops!", data.message, "error");
 			});
 		} else {
 
 			$route.reload();
 		}
-	};
+	}; */
 });
 
 app.controller('EditUserController', function($scope, $http, $routeParams, $location){
@@ -338,11 +383,13 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 			data: $scope.user
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "User Updated!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
 			$location.path('/addUser');
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 	};
 });

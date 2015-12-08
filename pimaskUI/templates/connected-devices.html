@@ -3,11 +3,16 @@
     <div class="col-lg-8 col-lg-offset-2">
       <p style="font-type:bold; font-size:20px">List of connected devices:</p>
       <table class="table">
-        <thead></thead>
+        <thead>
+          <th>IP</th>
+          <th>Hostname</th>
+          <th>Notification</th>
+        </thead>
           <tbody>
             <tr ng-repeat='name in names'>
               <td>{{ name.device_ip }}</td>
               <td>{{ name.name }}</td>
+              <td>{{ name.notification}}</td>
               <td><a href="#/editDevice/{{name.device_ip}}" class="btn btn-xs btn-primary" data-target="#editDevices">Edit</a>&nbsp;&nbsp;<a ng-click="deleteDevice(name)" class="btn btn-xs btn-primary" role="button">Delete</a></td>
                 <td><a target="_blank" href="{{name.live_streaming}}" class="btn">Live Streaming</a></td>
             </tr>
