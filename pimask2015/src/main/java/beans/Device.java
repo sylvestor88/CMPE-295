@@ -9,6 +9,7 @@ public class Device {
 	@PartitionKey
 	private String device_ip;
 	
+	private String device_type;
 	private boolean notification = true;
 	private String data_location;
 	private String live_streaming;
@@ -79,6 +80,13 @@ public class Device {
 	private int minimum_motion_frames = 10;
 	
 	// getter and setter methods for the configurable variables.
+	
+	public String getDevice_type() {
+		return device_type;
+	}
+	public void setDevice_type(String device_type) {
+		this.device_type = device_type;
+	}
 	public String getDevice_ip() {
 		return device_ip;
 	}
