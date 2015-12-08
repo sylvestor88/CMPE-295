@@ -8,7 +8,7 @@
             <tr ng-repeat='name in names'>
               <td>{{ name.device_ip }}</td>
               <td>{{ name.name }}</td>
-              <td><a target="_blank" href="{{name.live_streaming}}" role="button" class="btn btn-xs btn-primary">Live</a>&nbsp;&nbsp;<a href="#/editDevice/{{name.device_ip}}" class="btn btn-xs btn-primary" data-target="#editDevices">Edit</a>&nbsp;&nbsp;<a ng-click="deleteDevice(name)" class="btn btn-xs btn-primary" role="button">Delete</a>&nbsp;&nbsp;</td>
+              <td><a target="_blank" href="{{name.live_streaming}}" role="button" class="btn btn-xs btn-primary">Live</a>&nbsp;&nbsp;<a href="#/edit_picam_device/{{name.device_ip}}" class="btn btn-xs btn-primary" data-target="#edit_picam_device">Edit</a>&nbsp;&nbsp;<a ng-click="deleteDevice(name)" class="btn btn-xs btn-primary" role="button">Delete</a>&nbsp;&nbsp;</td>
             </tr>
           </tbody>
       </table> 

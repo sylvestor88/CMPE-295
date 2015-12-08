@@ -33,7 +33,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#/connectedDevices" data-target="#connectedDevices">
+                <a class="navbar-brand" href="#/connected_devices" data-target="#connected_devices">
                     <span class="light">PiMask</span>
                 </a>
             </div>
@@ -43,13 +43,23 @@
                 <ul class="nav navbar-nav">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     <li>
-                        <a href="#/connectedDevices" data-target="#connectedDevices">Devices Connected</a>
+                        <a href="#/connected_devices" data-target="#connected_devices">Devices Connected</a>
+                    </li>
+                    <li class="dropdown">
+                        <a id="aboutDropDown" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopus="true" aria-expanded="false"> New Device
+                        <span class="caret"></span>
+                        </a> 
+                            <ul class="dropdown-menu" aria-labelledby="aboutDropDown">
+                                <li class>
+                                    <a href="#/find_picam_devices" data-target="#find_picam_devices">PiMask Cam</a>
+                                </li>
+                                <li class>
+                                    <a href="#/find_other_devices" data-target="#find_other_devices">Other Cam</a>
+                                </li>
+                            </ul>
                     </li>
                     <li>
-                        <a href="#/findDevices" data-target="#findDevices">Find New Device</a>
-                    </li>
-                    <li>
-                        <a href="#/addUser" data-target="#contact">Contact</a>
+                        <a href="#/add_user" data-target="#add_user">User</a>
                     </li>
                 </ul>
             </div>

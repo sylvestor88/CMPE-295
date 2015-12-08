@@ -9,7 +9,7 @@ public class Device {
 	@PartitionKey
 	private String device_ip;
 	
-	private String device_type;
+	private String device_type = null;
 	private boolean notification = true;
 	private String data_location;
 	private String live_streaming;

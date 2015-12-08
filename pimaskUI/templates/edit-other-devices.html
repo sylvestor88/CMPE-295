@@ -1,0 +1,33 @@
+<section  id="editDevices" class="container content-section">
+  <p style="margin-top:20px; font-type:bold; font-size:20px"> Edit Configuration for {{device.devcie_name}}</p>
+  <form name="deviceForm" ng-submit="deviceForm.$valid && submitForm(device)" novalidate>
+
+
+  <!------------------------------------------------- Video Device Details -------------------------------------------------------->
+  
+  <details>
+  <summary class="btn btn-large" style="font-type:bold; font-size: 18px">Video Device</summary>
+  <fieldset class="form-group">
+    <label for="name">Device Name</label>
+    <input ng-model="device.name" type="text" class="form-control" id="name" placeholder="Camera 1">
+  </fieldset>
+
+  <fieldset disabled>
+    <div class="form-group">
+      <label for="device_ip">IP</label>
+      <input ng-model="device.device_ip" type="text" id="device_ip" class="form-control" ng-value ="ip"  readonly>
+    </div>
+  </fieldset> 
+
+  <fieldset class="form-group">
+    <label for="notification">Receive Notification?</label>
+    <select class="form-control" id="notification" ng-model="device.notification" required>
+      <option value='true'>Yes</option>
+      <option value='false'>No</option>
+    </select>
+  </fieldset>  
+</details>
+<br>
+  <button type="submit" class="btn btn-primary">Update</button>
+ </form>
+</section>

@@ -1,45 +1,59 @@
 var app = angular.module('PiMask',['ngRoute'])
 .config(function($routeProvider){
-	$routeProvider.when('/connectedDevices', {
+	$routeProvider.when('/connected_devices', {
 		templateUrl: '/templates/connected-devices.html',
 		controller: 'ShowDevicesController',
 		controllerAs:'showDevicesCtrl'
 	})
-	.when('/findDevices', {
-		templateUrl: '/templates/find-devices.html',
-		controller: 'FindDevicesController',
-		controllerAs:'findDevicesCtrl'
+	.when('/find_picam_devices', {
+		templateUrl: '/templates/find-picam-devices.html',
+		controller: 'FindPiCamController',
+		controllerAs:'findPiCamCtrl'
 	})
-	.when('/configureDevice/:id', {
-		templateUrl: 'templates/configure-devices.html',
-		controller: 'ConfigureDeviceController',
-		controllerAs: 'configureDeviceCtrl'
+	.when('/find_other_devices', {
+		templateUrl: '/templates/find-other-devices.html',
+		controller: 'FindOtherController',
+		controllerAs:'findOtherCtrl'
 	})
-	.when('/editDevice/:id', {
+	.when('/configure_picam_device/:id', {
+		templateUrl: 'templates/configure-picam-devices.html',
+		controller: 'ConfigurePiCamController',
+		controllerAs: 'configurePiCamCtrl'
+	})
+	.when('/configure_other_device/:id', {
+		templateUrl: 'templates/configure-other-devices.html',
+		controller: 'ConfigureOtherController',
+		controllerAs: 'configureOtherCtrl'
+	})
+	.when('/edit_picam_device/:id', {
+		templateUrl: 'templates/edit-picam-devices.html',
+		controller: 'EditPiCamController',
+		controllerAs: 'editPiCamCtrl'
+	})
+	.when('/edit_other_device/:id', {
 		templateUrl: 'templates/edit-devices.html',
-		controller: 'EditDeviceController',
-		controllerAs: 'editDevicesCtrl'
+		controller: 'EditOtherController',
+		controllerAs: 'editOtherCtrl'
 	})
-	.when('/addUser', {
+	.when('/add_user', {
 		templateUrl: 'templates/add-user.html',
 		controller: 'AddUserController',
 		controllerAs: 'AddUserCtrl'
 	})
-	.when('/editUser/:id', {
+	.when('/edit_user/:id', {
 		templateUrl: 'templates/edit-user.html',
 		controller: 'EditUserController',
 		controllerAs: 'EditUserCtrl'
 	})
 	.when('/', {
-		redirectTo:'/connectedDevices'
+		redirectTo:'/connected_devices'
 	})
 });
 
-app.controller('FindDevicesController', function($scope, $http){
+app.controller('FindPiCamController', function($scope, $http){
 	$scope.names = {};
 //	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
-
-	$http.get('http://localhost:8080/pimask/find_devices')
+	$http.get('http://localhost:8080/pimask/find_picam_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
@@ -48,7 +62,23 @@ app.controller('FindDevicesController', function($scope, $http){
 	 	}
 	 })
 	 .error(function(){
-	 	alert("No Devices Found. Please try again!");
+	 	alert("Something went wrong. Please try again!");
+	 });
+});
+
+app.controller('FindOtherController', function($scope, $http){
+	$scope.names = {};
+//	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+	$http.get('http://localhost:8080/pimask/find_other_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 	if(response.length == 0)
+	 	{
+	 		alert("No Devices Found on the network.");
+	 	}
+	 })
+	 .error(function(){
+	 	alert("Something went wrong. Please try again!");
 	 });
 });
 
@@ -89,7 +119,7 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 	 };
 });
 
-app.controller('ConfigureDeviceController', function($scope, $http, $routeParams, $location){
+app.controller('ConfigurePiCamController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device={};
 	$scope.ip = $routeParams.id;
@@ -112,6 +142,7 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 		var deviceInfo = {
  		name: $scope.device.name,
  		device_ip: $routeParams.id,
+ 		device_type: "PiCam",
  		live_streaming: "http://" + $routeParams.id + ":8081",
  		brightness: brightnessInfo,
  		contrast: contrastInfo ,
@@ -142,13 +173,13 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 		$http({
 			method: 'POST',
-			url: 'http://localhost:8080/pimask/save_device',
+			url: 'http://localhost:8080/pimask/save_picam_device',
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
 		.success(function(data){
 			alert(data.message);
-			$location('/connectedDevices')
+			$location('/connected_devices')
 		})
 		.error(function(data){
 			alert(data.message);
@@ -159,7 +190,40 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 });
 
-app.controller('EditDeviceController', function($scope, $http, $routeParams, $location){
+app.controller('ConfigureOtherController', function($scope, $http, $routeParams, $location){
+	
+	$scope.device={};
+	$scope.ip = $routeParams.id;
+
+	$scope.submitForm = function(){	
+		
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $routeParams.id,
+ 		device_type: "Third Party",
+ 		live_streaming: "http://" + $routeParams.id + ":8081",
+ 		notification: $scope.device.notification
+ 		};
+
+		$http({
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/save_other_device',
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			alert(data.message);
+			$location.path() == '/connected_devices';
+		})
+		.error(function(data){
+			alert(data.message);
+		});
+
+		$scope.device={};
+	};
+});
+
+app.controller('EditPiCamController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device = {};
 	$scope.ip = $routeParams.id;
@@ -185,11 +249,10 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 			$scope.device.working_schedule.friday = $scope.device.working_schedule[4];
 			$scope.device.working_schedule.saturday = $scope.device.working_schedule[5];
 			$scope.device.working_schedule.sunday = $scope.device.working_schedule[6];
-
-			console.log($scope.device);
+			$scope.device.notification = String(data.notification);
 		});
 
-
+	
 	$scope.submitForm = function(){
 		var brightnessInfo = parseInt($scope.device.brightness*2.55);
 		var contrastInfo = parseInt($scope.device.contrast*2.55);
@@ -237,13 +300,53 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
  		console.log(deviceInfo);
 		$http({
 			method: 'POST',
-			url: 'http://localhost:8080/pimask/edit_device/' + $scope.ip,
+			url: 'http://localhost:8080/pimask/edit_picam_device/' + $scope.ip,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
 		.success(function(data){
 			alert(data.message);
-			$location('/connectedDevices')
+			$location('/connected_devices')
+		})
+		.error(function(data){
+			alert(data.message);
+		});
+	};
+});
+
+app.controller('EditOtherController', function($scope, $http, $routeParams, $location){
+	
+	$scope.device = {};
+	$scope.ip = $routeParams.id;
+
+	$http({
+			method: 'GET',
+			url: 'http://localhost:8080/pimask/findDevice/' + $scope.ip
+		})
+		.success(function(data){
+			$scope.device = data;
+			console.log(data.notification);
+			$scope.device.notification = String(data.notification);
+		});
+
+
+	$scope.submitForm = function(){
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $scope.ip,
+ 		live_streaming: "http://" + $scope.ip + ":8081",
+ 		notification: $scope.device.notification
+ 		};
+
+		$http({
+			method: 'PUT',
+			url: 'http://localhost:8080/pimask/edit_other_device/' + $scope.ip,
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			alert(data.message);
+			$location('/connected_devices')
 		})
 		.error(function(data){
 			alert(data.message);
@@ -318,15 +421,7 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 		})
 		.success(function(data){
 			$scope.user = data;
-			
-			if(data.notification == true)
-			{
-				$scope.user.notification = "true";
-			} else
-			{
-				$scope.user.notification = "false";
-			}
-			//console.log($scope.user);
+			$scope.user.notification = String($scope.user.notification);
 		});
 
 	$scope.editUser = function(){

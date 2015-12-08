@@ -34,7 +34,7 @@ public class PiController {
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
 
 	// finds PiCam devices on the same network as the Pi Server
-	@RequestMapping(value = "find_picam_device", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "find_picam_devices", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> piDevices() {
 
 		String currentIp = Helper.executeGetInet("ifconfig eth0");
@@ -49,7 +49,7 @@ public class PiController {
 	}
 
 	// finds other devices on the same network as the Pi Server
-	@RequestMapping(value = "find_other_device", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "find_other_devices", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> otherDevices() {
 
 		String currentIp = Helper.executeGetInet("ifconfig eth0");
@@ -71,8 +71,8 @@ public class PiController {
 		dev.setNetwork_server(serverIp);
 		dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name()
 				+ "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
-		ConfFileTemplate.createConfigFile(dev);
-		Helper.executePushConfFile(dev.getDevice_ip());
+		//ConfFileTemplate.createConfigFile(dev);
+		//Helper.executePushConfFile(dev.getDevice_ip());
 		Helper.saveDeviceInDB(dev);
 		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
@@ -80,17 +80,18 @@ public class PiController {
 
 	// save and configure other device to the database
 	@RequestMapping(value = "save_other_device", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody ResponseEntity<Device> saveOtherDevice(@Valid @RequestBody Device dev) {
+	public @ResponseBody ResponseEntity<Message> saveOtherDevice(@Valid @RequestBody Device dev) {
 		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		Helper.createDirectory(dev.getData_location());
 		Helper.saveDeviceInDB(dev);
-		return new ResponseEntity<Device>(dev, HttpStatus.CREATED);
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 	}
 
 	// update configured PiCam device to the database
-	@RequestMapping(value = "edit_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
+	@RequestMapping(value = "edit_picam_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> editPiDevice(@PathVariable("id") String devId,
 			@Valid @RequestBody Device dev) {
 		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
@@ -106,14 +107,14 @@ public class PiController {
 	}
 
 	// update configured other device to the database
-	@RequestMapping(value = "edit_other_device", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody ResponseEntity<Device> otherOtherDevice(@Valid @RequestBody Device dev) {
+	@RequestMapping(value = "edit_other_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> otherOtherDevice(@Valid @RequestBody Device dev) {
 		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		Helper.createDirectory(dev.getData_location());
-		Helper.saveDeviceInDB(dev);
-		return new ResponseEntity<Device>(dev, HttpStatus.CREATED);
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 	}
 
 	// get list of configured device from the database
@@ -129,7 +130,7 @@ public class PiController {
 			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);
 	}
 
-	// get a device details from the database
+	// get device details from the database
 	@RequestMapping(value = "findDevice/{id:.+}", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody ResponseEntity<Device> findDevice(@PathVariable("id") String devId) {
 		Device dev = Helper.findDeviceInDB(devId);
