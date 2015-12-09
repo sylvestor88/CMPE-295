@@ -30,156 +30,178 @@ import beans.User;
 @EnableAutoConfiguration
 @RequestMapping("/pimask/")
 public class PiController {
-	
+
 	ArrayList<NetworkDevice> deviceList = new ArrayList<NetworkDevice>();
-	
-	// finds devices on the same network as the Pi Server
-	@RequestMapping(value = "find_devices", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> listDevices() {
+
+	// finds PiCam devices on the same network as the Pi Server
+	@RequestMapping(value = "find_picam_devices", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> piDevices() {
 
 		String currentIp = Helper.executeGetInet("ifconfig eth0");
 		String subnet = Helper.getSubnet(currentIp);
-		ArrayList<NetworkDevice> deviceList = Helper.executeGetDevices("nmap -sP " + subnet + "1-255", currentIp);
-		
-		if(!deviceList.isEmpty())
-		{
+		ArrayList<NetworkDevice> deviceList = Helper.executeGetPiCamDevices("nmap -sP " + subnet + "1-255", currentIp);
+
+		if (!deviceList.isEmpty()) {
 			return new ResponseEntity<ArrayList<NetworkDevice>>(deviceList, HttpStatus.OK);
 		}
-		
+
 		return new ResponseEntity<ArrayList<NetworkDevice>>(HttpStatus.NOT_FOUND);
 	}
-	
-	// save configured device to the database
-		@RequestMapping(value="save_device", method = RequestMethod.POST, consumes = "application/json")
-		public @ResponseBody ResponseEntity<Message> saveDevice(@Valid @RequestBody Device dev)
-		{
-			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
-			String serverIp = Helper.executeGetInet("ifconfig eth0");
-			dev.setNetwork_server(serverIp);
-			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
-			ConfFileTemplate.createConfigFile(dev);
-			Helper.executePushConfFile(dev.getDevice_ip());
-			Helper.saveDeviceInDB(dev);
-			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
-			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+
+	// finds other devices on the same network as the Pi Server
+	@RequestMapping(value = "find_other_devices", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<ArrayList<NetworkDevice>> otherDevices() {
+
+		String currentIp = Helper.executeGetInet("ifconfig eth0");
+		String subnet = Helper.getSubnet(currentIp);
+		ArrayList<NetworkDevice> deviceList = Helper.executeGetOtherDevices("nmap -sP " + subnet + "1-255", currentIp);
+
+		if (!deviceList.isEmpty()) {
+			return new ResponseEntity<ArrayList<NetworkDevice>>(deviceList, HttpStatus.OK);
 		}
-		
-	// update configured device to the database
-		@RequestMapping(value="edit_device/{id:.+}", method = RequestMethod.POST, consumes = "application/json")
-		public @ResponseBody ResponseEntity<Message> editDevice(
-				@PathVariable("id") String devId, @Valid @RequestBody Device dev)
-		{
-			dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
-			String serverIp = Helper.executeGetInet("ifconfig eth0");
-			dev.setNetwork_server(serverIp);
-			dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name() + "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
-			ConfFileTemplate.createConfigFile(dev);
-			Helper.executePushConfFile(dev.getDevice_ip());
-			Helper.saveDeviceInDB(dev);
-			Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
-			return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
-		}
-		
-		
+
+		return new ResponseEntity<ArrayList<NetworkDevice>>(HttpStatus.NOT_FOUND);
+	}
+
+	// save and configure PiCam device to the database
+	@RequestMapping(value = "save_picam_device", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> savePiDevice(@Valid @RequestBody Device dev) {
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
+		String serverIp = Helper.executeGetInet("ifconfig eth0");
+		dev.setNetwork_server(serverIp);
+		dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name()
+				+ "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+		ConfFileTemplate.createConfigFile(dev);
+		Helper.executePushConfFile(dev.getDevice_ip());
+		Helper.saveDeviceInDB(dev);
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+
+	// save and configure other device to the database
+	@RequestMapping(value = "save_other_device", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> saveOtherDevice(@Valid @RequestBody Device dev) {
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
+		String serverIp = Helper.executeGetInet("ifconfig eth0");
+		dev.setNetwork_server(serverIp);
+		Helper.createDirectory(dev.getData_location());
+		Helper.saveDeviceInDB(dev);
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+
+	// update configured PiCam device to the database
+	@RequestMapping(value = "edit_picam_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> editPiDevice(@PathVariable("id") String devId,
+			@Valid @RequestBody Device dev) {
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
+		String serverIp = Helper.executeGetInet("ifconfig eth0");
+		dev.setNetwork_server(serverIp);
+		dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name()
+				+ "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
+		ConfFileTemplate.createConfigFile(dev);
+		Helper.executePushConfFile(dev.getDevice_ip());
+		Helper.saveDeviceInDB(dev);
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+
+	// update configured other device to the database
+	@RequestMapping(value = "edit_other_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> otherOtherDevice(@Valid @RequestBody Device dev) {
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
+		String serverIp = Helper.executeGetInet("ifconfig eth0");
+		dev.setNetwork_server(serverIp);
+		Helper.createDirectory(dev.getData_location());
+		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " has been updated.");
+		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
+	}
+
 	// get list of configured device from the database
-	@RequestMapping(value="connected", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody ResponseEntity<List<Device>> getDevices()
-	{
+	@RequestMapping(value = "connected", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<List<Device>> getDevices() {
 		List<Device> list = null;
 		Result<Device> results = Helper.getConnectedDevices();
 		list = results.all();
-		
-		if(!(list == null))
-		{
+
+		if (!(list == null)) {
 			return new ResponseEntity<List<Device>>(list, HttpStatus.OK);
-		}
-		else
-			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);	
+		} else
+			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);
 	}
-	
-	// get a device details from the database
-		@RequestMapping(value="findDevice/{id:.+}", method = RequestMethod.GET, produces = "application/json")
-		public @ResponseBody ResponseEntity<Device> findDevice(
-				@PathVariable("id") String devId)
-		{
-			Device dev = Helper.findDeviceInDB(devId);
-			return new ResponseEntity<Device>(dev, HttpStatus.OK);
-		}
-		
+
+	// get device details from the database
+	@RequestMapping(value = "findDevice/{id:.+}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<Device> findDevice(@PathVariable("id") String devId) {
+		Device dev = Helper.findDeviceInDB(devId);
+		return new ResponseEntity<Device>(dev, HttpStatus.OK);
+	}
+
 	// delete a device
-	@RequestMapping(value="deleteDevice/{id:.+}", method = RequestMethod.DELETE)
-	public @ResponseBody ResponseEntity<Message> deleteDevice(
-			@PathVariable("id") String devId)
-	{
+	@RequestMapping(value = "deleteDevice/{id:.+}", method = RequestMethod.DELETE)
+	public @ResponseBody ResponseEntity<Message> deleteDevice(@PathVariable("id") String devId) {
+		Device dev = Helper.findDeviceInDB(devId);
+		Helper.deleteDirectory(dev.getData_location());
 		Helper.deleteDeviceInDB(devId);
-		Message msg = new Message("Device Deleted from the Sever");
+		Message msg = new Message("Device successfully deleted from the Sever");
 		return new ResponseEntity<Message>(msg, HttpStatus.OK);
 	}
-	
+
 	// save user to the database
-	@RequestMapping(value="save_user", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody ResponseEntity<Message> saveUser(@Valid @RequestBody User user)
-	{
+	@RequestMapping(value = "save_user", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> saveUser(@Valid @RequestBody User user) {
 		UUID id = UUIDs.random();
 		user.setUser_id(id);
 		Helper.saveUserInDB(user);
-		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " saved.");
+		Message msg = new Message(
+				"User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " saved.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 	}
-	
+
 	// get a user from the database
-	@RequestMapping(value="users/{user_id}", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody ResponseEntity<User> getUserById(
-			@PathVariable("user_id") UUID userId)
-	{
+	@RequestMapping(value = "users/{user_id}", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<User> getUserById(@PathVariable("user_id") UUID userId) {
 		User user = Helper.getUserById(userId);
-		if(!(user == null))
-		{
+		if (!(user == null)) {
 			return new ResponseEntity<User>(user, HttpStatus.OK);
-		}
-		else
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);	
+		} else
+			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 	}
-	
+
 	// get list of users from the database
-	@RequestMapping(value="users", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody ResponseEntity<List<User>> getUsers()
-	{
+	@RequestMapping(value = "users", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody ResponseEntity<List<User>> getUsers() {
 		List<User> list = null;
 		Result<User> results = Helper.getUsers();
 		list = results.all();
-		
-		if(!(list == null))
-		{
+
+		if (!(list == null)) {
 			return new ResponseEntity<List<User>>(list, HttpStatus.OK);
-		}
-		else
-			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);	
+		} else
+			return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);
 	}
-	
-	//Update user in the database
-	@RequestMapping(value="edit_user/{user_id}", method=RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody ResponseEntity<Message> editUser(
-			@RequestBody User user, @PathVariable("user_id") UUID userId)
-	{
-		Helper.saveUserInDB(user);;
-		Message msg = new Message("User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " updated.");
+
+	// Update user in the database
+	@RequestMapping(value = "edit_user/{user_id}", method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody ResponseEntity<Message> editUser(@RequestBody User user,
+			@PathVariable("user_id") UUID userId) {
+		Helper.saveUserInDB(user);
+		Message msg = new Message(
+				"User record for " + user.getFirst_name() + " with mail Id " + user.getEmail() + " updated.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
 	}
-	
-	//Delete user from the database
-		@RequestMapping(value="delete_user/{user_id}", method=RequestMethod.DELETE, produces = "application/json")
-		public @ResponseBody ResponseEntity<Message> deleteUser(
-				@PathVariable("user_id") UUID userId)
-		{
-			Helper.deleteUserInDB(userId);
-			Message msg = new Message("User Deleted from the Sever");
-			return new ResponseEntity<Message>(msg, HttpStatus.OK);
-		}
+
+	// Delete user from the database
+	@RequestMapping(value = "delete_user/{user_id}", method = RequestMethod.DELETE, produces = "application/json")
+	public @ResponseBody ResponseEntity<Message> deleteUser(@PathVariable("user_id") UUID userId) {
+		Helper.deleteUserInDB(userId);
+		Message msg = new Message("User Deleted from the Sever");
+		return new ResponseEntity<Message>(msg, HttpStatus.OK);
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SpringApplication.run(PiController.class, args);
 	}
-	
+
 }

@@ -18,7 +18,7 @@ def list_directories():
     result = session.execute("select * from connected_devices")
     session.shutdown()
     cluster.shutdown()
-    return [x.data_location for x in result]
+    return [str(x.data_location) for x in result]
 
 
 def list_emails():
@@ -39,8 +39,8 @@ def send_mail(event):
 
 
     # Credentials
-    username = ''
-    password = ''
+    username = 'sylvestor.george88@yahoo.com'
+    password = 'PiMask2015'
 
     # The actual mail send
     server = smtplib.SMTP('smtp.mail.yahoo.com:587')
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     for i in directory_list:
         path = str(i)
         observer = Observer()
-        observer.schedule(MyHandler(), path)
+        observer.schedule(MyHandler(), path, recursive=True)
         observer.start()
 
     try:
