@@ -66,13 +66,13 @@ public class PiController {
 	// save and configure PiCam device to the database
 	@RequestMapping(value = "save_picam_device", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> savePiDevice(@Valid @RequestBody Device dev) {
-		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name()
 				+ "_" + dev.getNetwork_username() + "/" + dev.getName() + "_" + dev.getDevice_ip());
-		//ConfFileTemplate.createConfigFile(dev);
-		//Helper.executePushConfFile(dev.getDevice_ip());
+		ConfFileTemplate.createConfigFile(dev);
+		Helper.executePushConfFile(dev.getDevice_ip());
 		Helper.saveDeviceInDB(dev);
 		Message msg = new Message("Device " + dev.getName() + " with IP " + dev.getDevice_ip() + " is now connected.");
 		return new ResponseEntity<Message>(msg, HttpStatus.CREATED);
@@ -81,7 +81,7 @@ public class PiController {
 	// save and configure other device to the database
 	@RequestMapping(value = "save_other_device", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> saveOtherDevice(@Valid @RequestBody Device dev) {
-		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		Helper.createDirectory(dev.getData_location());
@@ -94,7 +94,7 @@ public class PiController {
 	@RequestMapping(value = "edit_picam_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> editPiDevice(@PathVariable("id") String devId,
 			@Valid @RequestBody Device dev) {
-		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		dev.setTarget_dir("/data/media/motioneye_" + serverIp.replaceAll("\\.", "_") + "_" + dev.getNetwork_share_name()
@@ -109,7 +109,7 @@ public class PiController {
 	// update configured other device to the database
 	@RequestMapping(value = "edit_other_device/{id:.+}", method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody ResponseEntity<Message> otherOtherDevice(@Valid @RequestBody Device dev) {
-		dev.setData_location("/home/pi/pimask_data/" + dev.getName() + "_" + dev.getDevice_ip());
+		dev.setData_location("/home/pi/pimask_videos/" + dev.getName() + "_" + dev.getDevice_ip());
 		String serverIp = Helper.executeGetInet("ifconfig eth0");
 		dev.setNetwork_server(serverIp);
 		Helper.createDirectory(dev.getData_location());

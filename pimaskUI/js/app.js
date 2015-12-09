@@ -103,27 +103,32 @@ app.controller('ShowDevicesController', function($scope, $http, $route, $routePa
 
 	 });
 
+	 
+
 	 $scope.deleteDevice = function(name){
 	 		swal({	title: "Are you sure?",
 	 				text: "Device " + name.name + " and all its files will be deleted permanently. Are you sure?",
 	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
 	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
 	 			function(){ 
-	 				var URL = 'http://192.168.1.105:8080/pimask/deleteDevice/' + String(name.device_ip);	
+	 				var URL = 'http://localhost:8080/pimask/deleteDevice/' + String(name.device_ip);	
+					
 					$http({
 						method: 'DELETE',
 						url: URL
 					})  
-			.success(function(data){
-				//alert(data.message);
-				swal("Deleted!", data.message, "success"); });
-				$route.reload();
-			})
-			.error(function(data){
-				//alert(data.message);
-				swal("Oops!", data.message, "error"); 
-			});
-		}; 
+					.success(function(data){
+					//alert(data.message);
+					//swal("Deleted!", data.message, "success"); 
+					swal({   title: "Device Deleted!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+					})
+					.error(function(data){
+					//alert(data.message);
+					swal("Oops!", data.message, "error");
+					});
+				});
+	 			$route.reload();
+			}; 
 });
 
 app.controller('ConfigurePiCamController', function($scope, $http, $routeParams, $location){
@@ -171,8 +176,6 @@ app.controller('ConfigurePiCamController', function($scope, $http, $routeParams,
  		notification: $scope.device.notification
  		};
 
- 		console.log(deviceInfo);
-
  		var wirelessInfo = {
  			ssid: $scope.device.ssid,
  			password: $scope.device.password
@@ -186,7 +189,7 @@ app.controller('ConfigurePiCamController', function($scope, $http, $routeParams,
 		})
 		.success(function(data){
 			//alert(data.message);
-			swal({   title: "Device Saved!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
+			swal({   title: "Device Saved!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
 			$location('/connected_devices')
 		})
 		.error(function(data){
@@ -221,11 +224,11 @@ app.controller('ConfigureOtherController', function($scope, $http, $routeParams,
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
+			swal({   title: "Device Saved!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
 			$location.path() == '/connected_devices';
 		})
 		.error(function(data){
-			alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 
 		$scope.device={};
@@ -308,17 +311,17 @@ app.controller('EditPiCamController', function($scope, $http, $routeParams, $loc
 
  		console.log(deviceInfo);
 		$http({
-			method: 'POST',
+			method: 'PUT',
 			url: 'http://localhost:8080/pimask/edit_picam_device/' + $scope.ip,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
+			swal({   title: "Device Updated!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
 			$location('/connected_devices')
 		})
 		.error(function(data){
-			alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 	};
 });
@@ -355,7 +358,7 @@ app.controller('EditOtherController', function($scope, $http, $routeParams, $loc
 		})
 		.success(function(data){
 			//alert(data.message);
-			swal({   title: "Device Updated!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
+			swal({   title: "Device Updated!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
 			$location('/connected_devices')
 		})
 		.error(function(data){
@@ -388,7 +391,7 @@ app.controller('AddUserController', function($scope, $http, $route){
 		})
 		.success(function(data){
 			//alert(data.message);
-			swal({   title: "User Created!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
+			swal({   title: "User Created!",   text: data.message,   timer: 2000, type: "success",   showConfirmButton: false });
 			$route.reload();
 		})
 		.error(function(data){
@@ -406,21 +409,23 @@ app.controller('AddUserController', function($scope, $http, $route){
 	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
 	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
 	 			function(){ 
-	 				var URL = 'http://192.168.1.105:8080/pimask/delete_user/' + user.user_id;	
+	 				var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+					
 					$http({
 						method: 'DELETE',
 						url: URL
 					})
-					
-				.success(function(data){
-					//alert(data.message);
-					swal("Deleted!", data.message, "success"); });
-					$route.reload();
-				})
-				.error(function(data){
-					//alert(data.message);
-					swal("Oops!", data.message, "error"); 
+					.success(function(data){
+						//alert(data.message);
+						swal("Deleted!", data.message, "success");
+						$route.reload();
+					})
+					.error(function(data){
+						//alert(data.message);
+						swal("Oops!", data.message, "error"); 
+					});
 				});
+				$route.reload();
 			};
 });
 
@@ -450,7 +455,7 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 		})
 		.success(function(data){
 			//alert(data.message);
-			swal({   title: "User Updated!",   text: data.message,   timer: 2000, type: success,   showConfirmButton: false });
+			swal({   title: "User Updated!",   text: data.message,   timer: 2000, type: "success",   showConfirmButton: false });
 			$location.path('/addUser');
 		})
 		.error(function(data){

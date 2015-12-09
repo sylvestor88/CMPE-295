@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS pimaskapp.connected_devices (
 	device_ip text PRIMARY KEY,
 	name text,
 	device_type text,
+	device_status text,
 	notification boolean,
 	data_location text,
 	live_streaming text,
