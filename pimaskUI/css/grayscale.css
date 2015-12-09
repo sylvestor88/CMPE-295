@@ -31,6 +31,17 @@
     padding-top: 20px;
 }
 
+#findOtherDevices {
+    margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
+}
+
 #connectedDevices {
     margin-top: 75px;
     background: #1a1a1a;
@@ -53,7 +64,29 @@
     padding-bottom: 20px;
 }
 
+#configureOtherDevices {
+    margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 90%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-bottom: 20px;
+}
+
 #editDevices {
+    margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 90%;
+    opacity: 50%;
+    color: #d9d9d9;
+    font-size: 15px;
+    padding-bottom: 20px;
+}
+
+#editOtherDevices {
     margin-top: 75px;
     background: #1a1a1a;
     border-radius: 7px;
@@ -73,6 +106,18 @@
     opacity: 50%;
     font-size: 15px;
     padding-top: 20px;
+}
+
+#editUser {
+    margin-top: 75px;
+    background: #1a1a1a;
+    border-radius: 7px;
+    width: 75%;
+    color: #d9d9d9;
+    opacity: 50%;
+    font-size: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #currentUsers{

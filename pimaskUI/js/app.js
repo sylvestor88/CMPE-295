@@ -1,47 +1,59 @@
 var app = angular.module('PiMask',['ngRoute'])
 .config(function($routeProvider){
-	$routeProvider.when('/connectedDevices', {
+	$routeProvider.when('/connected_devices', {
 		templateUrl: '/templates/connected-devices.html',
 		controller: 'ShowDevicesController',
 		controllerAs:'showDevicesCtrl'
 	})
-	.when('/findDevices', {
-		templateUrl: '/templates/find-devices.html',
-		controller: 'FindDevicesController',
-		controllerAs:'findDevicesCtrl'
+	.when('/find_picam_devices', {
+		templateUrl: '/templates/find-picam-devices.html',
+		controller: 'FindPiCamController',
+		controllerAs:'findPiCamCtrl'
 	})
-	.when('/configureDevice/:id', {
-		templateUrl: 'templates/configure-devices.html',
-		controller: 'ConfigureDeviceController',
-		controllerAs: 'configureDeviceCtrl'
+	.when('/find_other_devices', {
+		templateUrl: '/templates/find-other-devices.html',
+		controller: 'FindOtherController',
+		controllerAs:'findOtherCtrl'
 	})
-	.when('/editDevice/:id', {
+	.when('/configure_picam_device/:id', {
+		templateUrl: 'templates/configure-picam-devices.html',
+		controller: 'ConfigurePiCamController',
+		controllerAs: 'configurePiCamCtrl'
+	})
+	.when('/configure_other_device/:id', {
+		templateUrl: 'templates/configure-other-devices.html',
+		controller: 'ConfigureOtherController',
+		controllerAs: 'configureOtherCtrl'
+	})
+	.when('/edit_picam_device/:id', {
+		templateUrl: 'templates/edit-picam-devices.html',
+		controller: 'EditPiCamController',
+		controllerAs: 'editPiCamCtrl'
+	})
+	.when('/edit_other_device/:id', {
 		templateUrl: 'templates/edit-devices.html',
-		controller: 'EditDeviceController',
-		controllerAs: 'editDevicesCtrl'
+		controller: 'EditOtherController',
+		controllerAs: 'editOtherCtrl'
 	})
-	.when('/addUser', {
+	.when('/add_user', {
 		templateUrl: 'templates/add-user.html',
 		controller: 'AddUserController',
 		controllerAs: 'AddUserCtrl'
 	})
-	.when('/editUser/:id', {
+	.when('/edit_user/:id', {
 		templateUrl: 'templates/edit-user.html',
 		controller: 'EditUserController',
 		controllerAs: 'EditUserCtrl'
 	})
 	.when('/', {
-		redirectTo:'/connectedDevices'
+		redirectTo:'/connected_devices'
 	})
 });
 
-app.controller('FindDevicesController', function($scope, $http){
-
-	//$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
-
+app.controller('FindPiCamController', function($scope, $http){
 	$scope.names = {};
-
-	$http.get('http://192.168.1.105:8080/pimask/find_devices')
+//	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+	$http.get('http://localhost:8080/pimask/find_picam_devices')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
@@ -50,49 +62,76 @@ app.controller('FindDevicesController', function($scope, $http){
 	 	}
 	 })
 	 .error(function(){
-	 	alert("No Devices Found. Please try again!");
+	 	alert("Something went wrong. Please try again!");
+	 });
+});
+
+app.controller('FindOtherController', function($scope, $http){
+	$scope.names = {};
+//	$scope.names = [{"ip": "192.168.100.23", "hostname": "PiCamera"}, {"ip": "192.168.100.27", "hostname": "Android-odqe25242eq3d3"}, {"ip": "192.168.100.35", "hostname": "ASUS-Router"}];
+	$http.get('http://localhost:8080/pimask/find_other_devices')
+	 .success(function(response){
+	 	$scope.names = response;
+	 	if(response.length == 0)
+	 	{
+	 		//alert("No Devices Found on the network.");
+	 		swal({   title: "Sorry!",   text: "No Devices Found on the network. Check your internet connection.",   type: "error",   confirmButtonText: "OK" });
+	 	}
+	 })
+	 .error(function(){
+	 	//alert("No Devices Found. Please try again!");
+	 	swal({   title: "Sorry!",   text: "No Devices Found on the network. Check your internet connection.",   type: "error",   confirmButtonText: "OK" });
 	 });
 });
 
 app.controller('ShowDevicesController', function($scope, $http, $route, $routeParams){
 
-	$scope.names = {};
-
+	$scope.names = {};	
 	//$scope.names = [{"device_ip": "192.168.100.23", "device_name": "PiCamera"}, {"device_ip": "192.168.100.27", "device_name": "Android-odqe25242eq3d3"}, {"device_ip": "192.168.100.35", "device_name": "ASUS-Router"}];
-	$http.get('http://192.168.1.105:8080/pimask/connected')
+	$http.get('http://localhost:8080/pimask/connected')
 	 .success(function(response){
 	 	$scope.names = response;
 	 	if(response.length == 0)
 	 	{
-	 		alert("No devices connected to the server.");
+	 		//alert("No devices connected to the server.");
+	 		swal({   title: "Sorry!",   text: "No devices are currently connected to the server.",   type: "error",   confirmButtonText: "OK" });
 	 	}
 	 })
 	 .error(function(response){
-	 	alert("Something went wrong. Please try again!")
+	 	//alert("Something went wrong. Please try again!");
+	 	swal({   title: "Error!",   text: "Something went wrong. Please try again!",   type: "error",   confirmButtonText: "OK" });
+
 	 });
 
+	 
+
 	 $scope.deleteDevice = function(name){
-		
-		if(confirm("Device " + name.name + " and all its files will be deleted permanently. Are you sure?") == true){
-			var URL = 'http://192.168.1.105:8080/pimask/deleteDevice/' + String(name.device_ip);	
-			$http({
-				method: 'DELETE',
-				url: URL
-			})
-			.success(function(data){
-				alert(data.message);
-				$route.reload();
-			})
-			.error(function(data){
-				alert(data.message);
-			});
-		} else{
-			$route.reload();
-		}
-	 };
+	 		swal({	title: "Are you sure?",
+	 				text: "Device " + name.name + " and all its files will be deleted permanently. Are you sure?",
+	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
+	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
+	 			function(){ 
+	 				var URL = 'http://localhost:8080/pimask/deleteDevice/' + String(name.device_ip);	
+					
+					$http({
+						method: 'DELETE',
+						url: URL
+					})  
+					.success(function(data){
+					//alert(data.message);
+					//swal("Deleted!", data.message, "success"); 
+					swal({   title: "Device Deleted!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+					})
+					.error(function(data){
+					//alert(data.message);
+					swal("Oops!", data.message, "error");
+					});
+				});
+	 			$route.reload();
+			}; 
 });
 
-app.controller('ConfigureDeviceController', function($scope, $http, $routeParams, $location){
+app.controller('ConfigurePiCamController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device={};
 	$scope.ip = $routeParams.id;
@@ -115,6 +154,7 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 		var deviceInfo = {
  		name: $scope.device.name,
  		device_ip: $routeParams.id,
+ 		device_type: "PiCam",
  		live_streaming: "http://" + $routeParams.id + ":8081",
  		brightness: brightnessInfo,
  		contrast: contrastInfo ,
@@ -132,7 +172,8 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
  		pre_capture: $scope.device.pre_capture,
  		post_capture: $scope.device.post_capture,
  		minimum_motion_frames: $scope.device.minimum_motion_frames,
- 		working_schedule: working_scheduleInfo
+ 		working_schedule: working_scheduleInfo,
+ 		notification: $scope.device.notification
  		};
 
  		var wirelessInfo = {
@@ -142,16 +183,18 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 		$http({
 			method: 'POST',
-			url: 'http://192.168.1.105:8080/pimask/save_device',
+			url: 'http://localhost:8080/pimask/save_picam_device',
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
-			$location('/connectedDevices')
+			//alert(data.message);
+			swal({   title: "Device Saved!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+			$location('/connected_devices')
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error"); 
 		});
 
 		$scope.device={};
@@ -159,14 +202,47 @@ app.controller('ConfigureDeviceController', function($scope, $http, $routeParams
 
 });
 
-app.controller('EditDeviceController', function($scope, $http, $routeParams, $location){
+app.controller('ConfigureOtherController', function($scope, $http, $routeParams, $location){
+	
+	$scope.device={};
+	$scope.ip = $routeParams.id;
+
+	$scope.submitForm = function(){	
+		
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $routeParams.id,
+ 		device_type: "Third Party",
+ 		live_streaming: "http://" + $routeParams.id + ":8081",
+ 		notification: $scope.device.notification
+ 		};
+
+		$http({
+			method: 'POST',
+			url: 'http://localhost:8080/pimask/save_other_device',
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			swal({   title: "Device Saved!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+			$location.path() == '/connected_devices';
+		})
+		.error(function(data){
+			swal("Oops!", data.message, "error");
+		});
+
+		$scope.device={};
+	};
+});
+
+app.controller('EditPiCamController', function($scope, $http, $routeParams, $location){
 	
 	$scope.device = {};
 	$scope.ip = $routeParams.id;
 
 	$http({
 			method: 'GET',
-			url: 'http://192.168.1.105:8080/pimask/findDevice/' + $scope.ip
+			url: 'http://localhost:8080/pimask/findDevice/' + $scope.ip
 		})
 		.success(function(data){
 			$scope.device = data;
@@ -185,11 +261,10 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 			$scope.device.working_schedule.friday = $scope.device.working_schedule[4];
 			$scope.device.working_schedule.saturday = $scope.device.working_schedule[5];
 			$scope.device.working_schedule.sunday = $scope.device.working_schedule[6];
-
-			console.log($scope.device);
+			$scope.device.notification = String(data.notification);
 		});
 
-
+	
 	$scope.submitForm = function(){
 		var brightnessInfo = parseInt($scope.device.brightness*2.55);
 		var contrastInfo = parseInt($scope.device.contrast*2.55);
@@ -225,7 +300,8 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
  		pre_capture: $scope.device.pre_capture,
  		post_capture: $scope.device.post_capture,
  		minimum_motion_frames: $scope.device.minimum_motion_frames,
- 		working_schedule: working_scheduleInfo
+ 		working_schedule: working_scheduleInfo,
+ 		notification: $scope.device.notification
  		};
 
  		var wirelessInfo = {
@@ -235,17 +311,59 @@ app.controller('EditDeviceController', function($scope, $http, $routeParams, $lo
 
  		console.log(deviceInfo);
 		$http({
-			method: 'POST',
-			url: 'http://192.168.1.105:8080/pimask/edit_device/' + $scope.ip,
+			method: 'PUT',
+			url: 'http://localhost:8080/pimask/edit_picam_device/' + $scope.ip,
 			headers: {'Content-Type': 'application/json'},
 			data: deviceInfo
 		})
 		.success(function(data){
-			alert(data.message);
-			$location('/connectedDevices')
+			swal({   title: "Device Updated!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+			$location('/connected_devices')
 		})
 		.error(function(data){
-			alert(data.message);
+			swal("Oops!", data.message, "error");
+		});
+	};
+});
+
+app.controller('EditOtherController', function($scope, $http, $routeParams, $location){
+	
+	$scope.device = {};
+	$scope.ip = $routeParams.id;
+
+	$http({
+			method: 'GET',
+			url: 'http://localhost:8080/pimask/findDevice/' + $scope.ip
+		})
+		.success(function(data){
+			$scope.device = data;
+			console.log(data.notification);
+			$scope.device.notification = String(data.notification);
+		});
+
+
+	$scope.submitForm = function(){
+		var deviceInfo = {
+ 		name: $scope.device.name,
+ 		device_ip: $scope.ip,
+ 		live_streaming: "http://" + $scope.ip + ":8081",
+ 		notification: $scope.device.notification
+ 		};
+
+		$http({
+			method: 'PUT',
+			url: 'http://localhost:8080/pimask/edit_other_device/' + $scope.ip,
+			headers: {'Content-Type': 'application/json'},
+			data: deviceInfo
+		})
+		.success(function(data){
+			//alert(data.message);
+			swal({   title: "Device Updated!",   text: data.message,   timer: 5000, type: "success",   showConfirmButton: false });
+			$location('/connected_devices')
+		})
+		.error(function(data){
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 	};
 });
@@ -256,7 +374,7 @@ app.controller('AddUserController', function($scope, $http, $route){
 
 	$http({
 			method: 'GET',
-			url: 'http://192.168.1.105:8080/pimask/users'
+			url: 'http://localhost:8080/pimask/users'
 		})
 		.success(function(data){
 			$scope.users = data;
@@ -267,42 +385,48 @@ app.controller('AddUserController', function($scope, $http, $route){
 		console.log($scope.newUser);
 		$http({
 			method: 'POST',
-			url: 'http://192.168.1.105:8080/pimask/save_user',
+			url: 'http://localhost:8080/pimask/save_user',
 			headers: {'Content-Type': 'application/json'},
 			data: $scope.newUser
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "User Created!",   text: data.message,   timer: 2000, type: "success",   showConfirmButton: false });
 			$route.reload();
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 
 		$scope.newUser = {};
 	}
 
 	$scope.deleteUser = function(user){
-		
-		if(confirm("User " + user.email + " will be deleted. Are you sure?") == true){
-
-			var URL = 'http://192.168.1.105:8080/pimask/delete_user/' + user.user_id;	
-			$http({
-				method: 'DELETE',
-				url: URL
-			})
-			.success(function(data){
-				alert(data.message);
+	
+		swal({	title: "Are you sure?",
+	 				text: "Device " + name.name + " and all its files will be deleted permanently. Are you sure?",
+	 				type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",
+	 				confirmButtonText: "Yes, delete it!",   closeOnConfirm: false },
+	 			function(){ 
+	 				var URL = 'http://localhost:8080/pimask/delete_user/' + user.user_id;	
+					
+					$http({
+						method: 'DELETE',
+						url: URL
+					})
+					.success(function(data){
+						//alert(data.message);
+						swal("Deleted!", data.message, "success");
+						$route.reload();
+					})
+					.error(function(data){
+						//alert(data.message);
+						swal("Oops!", data.message, "error"); 
+					});
+				});
 				$route.reload();
-			})
-			.error(function(data){
-				alert(data.message);
-			});
-		} else {
-
-			$route.reload();
-		}
-	};
+			};
 });
 
 app.controller('EditUserController', function($scope, $http, $routeParams, $location){
@@ -313,19 +437,11 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 
 	$http({
 			method: 'GET',
-			url: 'http://192.168.1.105:8080/pimask/users/' + $scope.id
+			url: 'http://localhost:8080/pimask/users/' + $scope.id
 		})
 		.success(function(data){
 			$scope.user = data;
-			
-			if(data.notification == true)
-			{
-				$scope.user.notification = "true";
-			} else
-			{
-				$scope.user.notification = "false";
-			}
-			//console.log($scope.user);
+			$scope.user.notification = String($scope.user.notification);
 		});
 
 	$scope.editUser = function(){
@@ -333,16 +449,18 @@ app.controller('EditUserController', function($scope, $http, $routeParams, $loca
 		//console.log($scope.user);
 		$http({
 			method: 'PUT',
-			url: 'http://192.168.1.105:8080/pimask/edit_user/' + $scope.user.user_id,
+			url: 'http://localhost:8080/pimask/edit_user/' + $scope.user.user_id,
 			headers: {'Content-Type': 'application/json'},
 			data: $scope.user
 		})
 		.success(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal({   title: "User Updated!",   text: data.message,   timer: 2000, type: "success",   showConfirmButton: false });
 			$location.path('/addUser');
 		})
 		.error(function(data){
-			alert(data.message);
+			//alert(data.message);
+			swal("Oops!", data.message, "error");
 		});
 	};
 });

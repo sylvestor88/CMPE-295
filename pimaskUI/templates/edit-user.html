@@ -1,4 +1,6 @@
-<form name="userForm" class="userForm" ng-submit="userForm.$valid && editUser(user)" novalidate>
+<section id="editUser" class="container content-section">
+<form class="userForm" ng-submit="userForm.$valid && editUser(user)" novalidate>
+ <p style="margin-top:20px; font-type:bold; font-size:20px">Edit a user</p>
   <fieldset class="form-group">
     <label for="email">Email address</label>
     <input type="email" class="form-control" id="email" placeholder="Ex: something@xyz.com" ng-model="user.email" required>
@@ -20,3 +22,4 @@
   </fieldset>
   <button type="submit" class="btn btn-primary">Update</button>
 </form>
+</section>

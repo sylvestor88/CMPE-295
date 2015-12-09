@@ -9,10 +9,11 @@ public class Device {
 	@PartitionKey
 	private String device_ip;
 	
+	private String device_type = null;
 	private boolean notification = true;
 	private String data_location;
 	private String live_streaming;
-
+	private String device_status = "Up";
 	//===============begin of the conf variables =================================
 	private String working_schedule_type = "during";
 	private int webcam_resolution = 100;
@@ -79,6 +80,19 @@ public class Device {
 	private int minimum_motion_frames = 10;
 	
 	// getter and setter methods for the configurable variables.
+	public String getDevice_status() {
+		return device_status;
+	}
+	public void setDevice_status(String device_status) {
+		this.device_status = device_status;
+	}
+	
+	public String getDevice_type() {
+		return device_type;
+	}
+	public void setDevice_type(String device_type) {
+		this.device_type = device_type;
+	}
 	public String getDevice_ip() {
 		return device_ip;
 	}
