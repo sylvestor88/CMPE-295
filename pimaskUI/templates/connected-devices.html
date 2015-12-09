@@ -4,14 +4,19 @@
       <p style="font-type:bold; font-size:20px">List of connected devices:</p>
       <table class="table">
         <thead>
+          <th class="align-left">IP</th>
+          <th class="align-left">Name</th>
+          <th class="align-left">Status</th>
+          <th class="align-left"></th>
         </thead>
-          <tbody>
-            <tr ng-repeat='name in names'>
-              <td>{{ name.device_ip }}</td>
-              <td>{{ name.name }}</td>
-              <td><a target="_blank" href="{{name.live_streaming}}" role="button" class="btn btn-xs btn-primary">Live</a>&nbsp;&nbsp;<a href="#/edit_picam_device/{{name.device_ip}}" class="btn btn-xs btn-primary" data-target="#edit_picam_device">Edit</a>&nbsp;&nbsp;<a ng-click="deleteDevice(name)" class="btn btn-xs btn-primary" role="button">Delete</a>&nbsp;&nbsp;</td>
-            </tr>
-          </tbody>
+        <tbody>
+          <tr ng-repeat='name in names'>
+            <td class="align-left">{{ name.device_ip }}</td>
+            <td class="align-left">{{ name.name }}</td>
+            <td class="align-left">{{ name.device_status }}</td>
+            <td class="align-left"><a target="_blank" href="{{name.live_streaming}}" role="button" class="btn btn-xs btn-primary">Live</a>&nbsp;&nbsp;<a href="#/edit_picam_device/{{name.device_ip}}" class="btn btn-xs btn-primary" data-target="#edit_picam_device">Edit</a>&nbsp;&nbsp;<a ng-click="deleteDevice(name)" class="btn btn-xs btn-primary" role="button">Delete</a>&nbsp;&nbsp;</td>
+          </tr>
+        </tbody>
       </table> 
     </div>
   </div>
