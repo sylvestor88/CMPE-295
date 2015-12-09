@@ -43,16 +43,17 @@ def send_mail(event):
     password = 'PiMask2015'
 
     # The actual mail send
-    server = smtplib.SMTP('smtp.mail.yahoo.com:587')
-    server.starttls()
-    server.login(username,password)
-    server.sendmail(fromaddr, toaddr, msg)
-    server.quit()
+    if len(toaddr) != 0:
+        server = smtplib.SMTP('smtp.mail.yahoo.com:587')
+        server.starttls()
+        server.login(username,password)
+        server.sendmail(fromaddr, toaddr, msg)
+        server.quit()
 
 
 class MyHandler(PatternMatchingEventHandler):
 
-    patterns = ["*.txt"]
+    patterns = ["*.avi"]
 
     def process(self, event):
         """
